@@ -3,14 +3,13 @@
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
 -->
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
     <head>
-        <title>Teams List</title>
+        <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-           <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-    <style>
+        <title>Add Team Form</title>
+        <style>
         * {
             margin: 0;
             padding: 0;
@@ -18,400 +17,216 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e8e8e8;
-            color: #000;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #ececec 100%);
             min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            font-size: 32px;
-            font-weight: 600;
-            color: #000;
-        }
-
-        .add-user-btn {
-            background-color: #0066cc;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .add-user-btn:hover {
-            background-color: #0052a3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
-            text-decoration: none;
-        }
-
-        .add-user-btn:active {
-            transform: translateY(0);
-            text-decoration: none;
-        }
-
-        .table-wrapper {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead {
-            background-color: #f5f5f5;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        th {
-            padding: 16px;
-            text-align: left;
-            font-weight: 600;
-            color: #000;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        tbody tr {
-            border-bottom: 1px solid #e8e8e8;
-            transition: background-color 0.2s ease;
-        }
-
-        tbody tr:hover {
-            background-color: #f9f9f9;
-        }
-
-        tbody tr:last-child {
-            border-bottom: none;
-        }
-
-        td {
-            padding: 16px;
-            color: #000;
-            font-size: 14px;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-active {
-            background-color: #d4f4dd;
-            color: #0d6f3c;
-        }
-
-        .status-inactive {
-            background-color: #fce4e6;
-            color: #b71c1c;
-        }
-
-        .actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .action-btn {
-            background-color: #0066cc;
-            color: white;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 4px;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            transition: all 0.3s ease;
+            padding: 20px;
         }
 
-        .action-btn:hover {
-            background-color: #0052a3;
-            transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 600px;
+            padding: 48px;
+            animation: slideUp 0.4s ease-out;
         }
 
-        .action-btn:active {
-            transform: scale(0.95);
-        }
-
-        .delete-btn {
-            background-color: #d32f2f;
-        }
-
-        .delete-btn:hover {
-            background-color: #b71c1c;
-            box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
-        }
-
-        .empty-message {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-            font-size: 16px;
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
-        .pagination-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 24px 0 8px;
-  }
+        .text-danger{
+            color: red;
+            font-style: italic;
+            font-size: 12px;
+        }
 
-  .page-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    border: 1.5px solid #e2e8f0;
-    background: #ffffff;
-    color: #475569;
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.18s ease;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-  }
+        .form-header {
+            margin-bottom: 32px;
+        }
 
-  .page-btn:hover {
-    background: #f1f5f9;
-    border-color: #94a3b8;
-    color: #1e293b;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  }
+        .form-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
 
-  .page-btn.active {
-    background: #2563eb;
-    border-color: #2563eb;
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
-    transform: translateY(-1px);
-  }
+        .form-header p {
+            font-size: 14px;
+            color: #666;
+        }
 
-  .page-btn.active:hover {
-    background: #1d4ed8;
-    border-color: #1d4ed8;
-  }
+        .form-group {
+            margin-bottom: 24px;
+        }
 
-  .page-btn.disabled {
-    opacity: 0.35;
-    pointer-events: none;
-  }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            transition: color 0.2s ease;
+        }
 
-  .page-btn svg {
-    width: 16px;
-    height: 16px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: #fafafa;
+        }
 
-  .page-info {
-    font-size: 0.8rem;
-    color: #94a3b8;
-    margin: 0 4px;
-    font-family: 'DM Sans', sans-serif;
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            background: white;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
 
-      }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
 
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 20px;
-                align-items: flex-start;
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: #0066cc;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0052a3;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #1a1a1a;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .success-message {
+            display: none;
+            padding: 16px;
+            margin-bottom: 24px;
+            background: #e8f5e9;
+            border: 1px solid #4caf50;
+            border-radius: 8px;
+            color: #2e7d32;
+            font-size: 14px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
             }
-
-            .table-wrapper {
-                overflow-x: auto;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
+        }
 
-            th, td {
-                padding: 12px;
-                font-size: 13px;
-            }
+        .success-message.show {
+            display: block;
+        }
 
-            .header h1 {
-                font-size: 24px;
-            }
-            
+        input.error,
+        textarea.error {
+            border-color: #d32f2f;
+        }
+
+        .error-text {
+            color: #d32f2f;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error-text.show {
+            display: block;
         }
     </style>
     </head>
-    <body>
-        <div class="container">
-        <div class="header">
-            
-            <h1>Teams Management</h1>
-            <a class="add-user-btn" th:href="@{/teams/add_form}" style="text-decoration: none">
-                <i class="fas fa-plus"></i> Add Team
-            </a>
+    
+<body>
+    <div class="form-container">
+        <div class="success-message" id="successMessage">
+            ✓ Team added successfully!
         </div>
-            
-             <!-- Search Container -->
-                <div class="search-container">
-                    <form method="get" th:action="@{/teams/teams}" class="row g-3 align-items-end">
-                        <div class="col-md-4">
-                            <label for="keyword" class="form-label fw-bold">Search Team:</label>
-                            <input type="text" id="keyword" name="keyword" th:value="${Mykeyword}" 
-                                   class="form-control" placeholder="Enter keyword to search...">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn btn-dark">
-                                <i class="bi bi-search me-1"></i>Search
-                            </button>
-                        </div>
-                    </form>
-                </div>
 
-        <div class="table-wrapper">
-            <table id="usersTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th> 
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <!-- My data -->
-                    <tr th:each="t:${teamslist}"> 
-                        <td th:text="${t.id}"></td>
-                        <td th:text="${t.name}"></td>
-                        <td>
-                            <div class="actions">
-                                <a class="action-btn" th:href="@{/teams/edit_form(team_id=${t.id})}" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <button class="action-btn delete-btn" th:data-id="${t.id}" th:data-name="${t.name}" onclick="openDeleteModal(this)" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            
-<div class="pagination-wrapper" th:if="${totalPages.length > 1}">
-
-<!-- Previous button -->
-  <a class="page-btn"
-     th:classappend="${currentPage == 0} ? 'disabled'"
-     th:href="@{/teams(page=${currentPage - 1}, size=5)}">
-    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-  </a>
-
-  <!-- Page number buttons -->
-  <th:block th:each="page, status : ${totalPages}">
-    <a class="page-btn"
-       th:classappend="${status.index == currentPage} ? 'active'"
-       th:href="@{/teams(page=${status.index}, size=5)}"
-       th:text="${status.index + 1}">
-    </a>
-  </th:block>
-
-  <!-- Next button -->
-  <a class="page-btn"
-     th:classappend="${currentPage == totalPages.length - 1} ? 'disabled'"
-     th:href="@{/teams(page=${currentPage + 1}, size=5)}">
-    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-  </a>
-
-</div>
-
-
-<!-- ─── Page info label (optional, shows "Page 1 of 2") ─── -->
-<p class="page-info text-center"
-   th:text="'Page ' + (${currentPage + 1}) + ' of ' + ${totalPages.length}"
-   th:if="${totalPages.length > 1}">
-</p>
+        <div class="form-header">
+            <h1>Add Team</h1>
+            <p>Create a new team in your organization</p>
         </div>
-            
-     <!-- ELETE Modal -->
-      <div id="deleteModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
-    <div style="background:white; border-radius:12px; padding:40px; max-width:420px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.2); text-align:center;">
-        <div style="width:60px; height:60px; background:#fce4e6; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
-            <i class="fas fa-trash" style="color:#d32f2f; font-size:24px;"></i>
-        </div>
-        <h2 style="font-size:20px; font-weight:600; margin-bottom:12px;">Delete Team</h2>
-        <p id="modalMessage" style="color:#666; margin-bottom:32px; font-size:15px;"></p>
-        <div style="display:flex; gap:12px;">
-            <button onclick="cancelDelete()" style="flex:1; padding:12px; border:1px solid #e0e0e0; border-radius:8px; background:#f0f0f0; font-size:14px; cursor:pointer;">Cancel</button>
-            <button onclick="confirmDelete()" style="flex:1; padding:12px; border:none; border-radius:8px; background:#d32f2f; color:white; font-size:14px; cursor:pointer;">Yes, Delete</button>
-        </div>
+
+        <form id="teamForm" method="post" th:action="@{/teams/save}" th:object="${team}">
+            <div class="form-group">
+                <label for="teamName">Team Name *</label>
+                <input type="text" id="teamName" th:field="*{name}" required>
+
+                <div class="error-text" id="nameError">Team name is required</div>
+                <span class="text-danger" th:errors="*{name}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="teamNote">Notes</label>
+                <textarea id="teamNote" th:field="*{note}"></textarea>
+
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">Add Team</button>
+            </div>
+        </form>
     </div>
-</div>
 
-<!-- Hidden form that does the actual DELETE request -->
-<form id="deleteForm" method="post">
-    <input type="hidden" name="_method" value="delete"/>
-</form>
-    </div>
-    </div>
-<script>
-    let teamToDeleteId = null;
-let teamToDeleteRow = null;
-
-function openDeleteModal(btn) {
-    teamToDeleteId = btn.getAttribute('data-id');
-    teamToDeleteRow = btn.closest('tr');
-    document.getElementById('modalMessage').textContent = 
-        `Do you want to delete "${btn.getAttribute('data-name')}"?`;
-    document.getElementById('deleteModal').style.display = 'flex';
-}
-
-function cancelDelete() {
-    document.getElementById('deleteModal').style.display = 'none';
-    teamToDeleteId = null;
-    teamToDeleteRow = null;
-}
-
-function confirmDelete() {
-    // Set the form action dynamically and submit
-    document.getElementById('deleteForm').action = '/teams/delete?team_id=' + teamToDeleteId;
-    document.getElementById('deleteForm').submit();
-}
-
-document.getElementById('deleteModal').addEventListener('click', function(e) {
-    if (e.target === this) cancelDelete();
-});
-</script>
-    </body>
+    <script>
+        
+    </script>
+</body>
 </html>
