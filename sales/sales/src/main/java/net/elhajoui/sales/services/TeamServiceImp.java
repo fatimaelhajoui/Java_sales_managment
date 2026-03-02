@@ -32,8 +32,8 @@ public class TeamServiceImp implements TeamService{
     }
 
     @Override
-    public Page<Team> AllTeams(int page, int size) {
-        Page<Team> teams= teamRepository.findAll(PageRequest.of(page,size));
+    public Page<Team> AllTeams(String keyword, int page, int size) {
+        Page<Team> teams= teamRepository.findByNameContaining(keyword, PageRequest.of(page,size));
         return teams;
     }
 
