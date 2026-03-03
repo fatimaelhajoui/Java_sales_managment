@@ -16,7 +16,7 @@ import lombok.*;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @ToString 
 public class Team {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     
     @NotEmpty(message = "Full name is required")
     @Size(min = 2, max = 100, message = "Team name must be between 2 and 100 characters")
