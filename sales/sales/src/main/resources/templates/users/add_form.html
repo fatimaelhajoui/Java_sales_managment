@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Add New User</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+        <style>
+        *, *::before, *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 20px;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+            width: 100%;
+            max-width: 680px;
+            padding: 48px;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-header {
+            margin-bottom: 36px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .form-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .error-banner {
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            background: #fef2f2;
+            border: 1.5px solid #fca5a5;
+            border-radius: 8px;
+            color: #dc2626;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .form-header p {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label.field-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .form-group select {
+            width: 100%;
+            padding: 10px 13px;
+            font-size: 14px;
+            font-family: inherit;
+            border: 1.5px solid #e4e4e7;
+            border-radius: 8px;
+            background: #fafafa;
+            color: #111;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2563eb;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
+        }
+
+        /* Custom select */
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper select {
+            appearance: none;
+            -webkit-appearance: none;
+            padding-right: 36px;
+            cursor: pointer;
+        }
+
+        .select-wrapper::after {
+            content: '';
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #888;
+            pointer-events: none;
+        }
+
+        /* Radio buttons styled as toggle cards */
+        .radio-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .radio-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .radio-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 10px 14px;
+            border: 1.5px solid #e4e4e7;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            background: #fafafa;
+            transition: all 0.18s ease;
+            user-select: none;
+        }
+
+        .radio-option label::before {
+            content: '';
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid #d1d5db;
+            background: white;
+            flex-shrink: 0;
+            transition: all 0.18s ease;
+        }
+
+        /* Active option — green */
+        .radio-option.is-active input[type="radio"]:checked + label {
+            border-color: #16a34a;
+            background: #f0fdf4;
+            color: #16a34a;
+        }
+
+        .radio-option.is-active input[type="radio"]:checked + label::before {
+            border-color: #16a34a;
+            background: #16a34a;
+            box-shadow: inset 0 0 0 3px white;
+        }
+
+        .radio-option.is-active label:hover {
+            border-color: #16a34a;
+            color: #16a34a;
+        }
+
+        /* Inactive option — default blue */
+        .radio-option input[type="radio"]:checked + label {
+            border-color: #2563eb;
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .radio-option input[type="radio"]:checked + label::before {
+            border-color: #2563eb;
+            background: #2563eb;
+            box-shadow: inset 0 0 0 3px white;
+        }
+
+        .radio-option label:hover {
+            border-color: #94a3b8;
+            color: #444;
+        }
+
+        .text-danger {
+            color: #dc2626;
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+        }
+
+        .btn-primary:active { transform: scale(0.98); }
+
+        .btn-secondary {
+            background: white;
+            color: #444;
+            border: 1.5px solid #e4e4e7;
+            font-weight: 500;
+        }
+
+        .btn-secondary:hover {
+            background: #f4f4f5;
+        }
+
+        @media (max-width: 520px) {
+            .form-container { padding: 28px 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+        </style>
+    </head>
+
+    <body>
+        <div class="form-container">
+
+            <div class="form-header">
+                <h1>Add User</h1>
+                <p>Create a new user in your organization</p>
+            </div>
+
+            <form id="UserForm" method="post" th:action="@{/users/save}" th:object="${appUser}">
+            <div th:if="${errorMessage}" style="color:red;" th:text="${errorMessage}"></div>
+                <div class="form-grid">
+
+                  
+                    <div class="form-group">
+                        <label class="field-label" for="username">Username *</label>
+                        <input type="text" id="username" th:field="*{username}" placeholder="e.g. john_doe">
+                        <span class="text-danger" th:errors="*{username}"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="field-label" for="mail">Email *</label>
+                        <input type="text" id="mail" th:field="*{mail}" placeholder="john@company.com">
+                        <span class="text-danger" th:errors="*{mail}"></span>
+                    </div>
+
+                    <!-- Password + Role -->
+                    <div class="form-group">
+                        <label class="field-label" for="password">Password *</label>
+                        <input type="password" id="password" th:field="*{password}" placeholder="••••••••">
+                        <span class="text-danger" th:errors="*{password}"></span>
+                    </div>
+
+                    <div class="form-group">
+                         <label class="field-label" for="role">Role *</label>
+                            <div class="select-wrapper">
+                                <select id="role" th:field="*{role}">
+                                    <option value="">— Select a role —</option>
+                                    <option value="MANAGER">Manager</option>
+                                    <option value="AGENT">Agent</option>
+                                </select>
+                            </div>
+                            <span class="text-danger" th:errors="*{role}"></span>
+                    </div>
+
+                    <div class="form-group">
+                          <label class="field-label" for="team">Team *</label>
+                            <div class="select-wrapper">
+                                <select id="team" th:field="*{team.id}">
+                                    <option value="">— Select a team —</option>
+                                    <option th:each="t : ${teams}" th:value="${t.id}" th:text="${t.name}"></option>
+                                </select>
+                            </div>
+                            <span class="text-danger" th:errors="*{team}"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="field-label">Status *</label>
+                        <div class="radio-group">
+                            <div class="radio-option is-active">
+                                <input type="radio" id="statusActive" th:field="*{status}" value="true">
+                                <label for="statusActive">Active</label>
+                            </div>
+                            <div class="radio-option is-active">
+                                <input type="radio" id="statusInactive" th:field="*{status}" value="false">
+                                <label for="statusInactive">Inactive</label>
+                            </div>
+                        </div>
+                        <span class="text-danger" th:errors="*{status}"></span>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="window.location='/users'">Cancel</button>
+                    <button type="submit" class="btn-primary">Add User</button>
+                </div>
+                
+            </form>
+        </div>
+    </body>
+</html>
