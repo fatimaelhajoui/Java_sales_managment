@@ -35,7 +35,7 @@ public class UserController {
                         @RequestParam(name= "page", defaultValue = "0")int page, 
                         @RequestParam(name= "size", defaultValue = "5") int size){
         model.addAttribute( "userslist", userService.AllUsers(keyword, page, size).getContent() );
-        model.addAttribute( "totalpage", new int[userService.AllUsers(keyword, page, size).getTotalPages()] );
+        model.addAttribute( "totalPages", new int[userService.AllUsers(keyword, page, size).getTotalPages()] );
         model.addAttribute("currentPage", page);
         model.addAttribute("keyword", keyword);
         return "users/users";
@@ -49,7 +49,7 @@ public class UserController {
     } 
     
     @PostMapping(path = "/users/save")
-    public String saveTeam(@Valid AppUser appUser, BindingResult bindingResult, Model model){
+    public String saveUser (@Valid AppUser appUser, BindingResult bindingResult, Model model){
         model.addAttribute("teams", teamRepository.findAll());
         if (bindingResult.hasErrors()) return "users/add_form";
         try {
@@ -63,6 +63,19 @@ public class UserController {
         return "redirect:/users";
 
     }
+    
+    @GetMapping("/users/edit_form")
+    public String AppUserEdit(@RequestParam Long user_id, Model model,
+                        @RequestParam(name= "keyword", defaultValue = "")String keyword,
+                        @RequestParam(name= "page", defaultValue = "0")int page, 
+                        @RequestParam(name= "size", defaultValue = "5") int size) {
+        model.addAttribute("my_user", userService.editAppUser(user_id));
+        model.addAttribute("teams", teamRepository.findAll());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("keyword", keyword);
+        return "users/edit_form";
+    }
+    
     
     
 }
