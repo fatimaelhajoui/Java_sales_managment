@@ -110,7 +110,12 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void deleteAppUser(Long appUser_id) {
-        
+        AppUser user_todelete= userRepository.findById(appUser_id).orElse(null);
+        if(user_todelete == null){
+            throw new RuntimeException("User not exist!");
+        } 
+        userRepository.deleteById(appUser_id);
     }
     
 }
+
