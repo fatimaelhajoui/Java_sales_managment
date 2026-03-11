@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,11 +26,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImp implements UserService {
 
+   @Autowired
+   private PasswordEncoder passwordEncoder;
+    
     @Autowired
     private UserRepository userRepository;
     
     @Autowired
     private TeamRepository teamRepository;
+
+    
 
     @Override
     public Page<AppUser> AllUsers(String keyword,int page, int size) {
@@ -53,7 +59,7 @@ public class UserServiceImp implements UserService {
         ));
         new_appUser.setUsername(appUser.getUsername());
         new_appUser.setMail(appUser.getMail());
-        new_appUser.setPassword(appUser.getPassword());
+        new_appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         new_appUser.setRole(appUser.getRole());
         new_appUser.setStatus(appUser.getStatus());
         new_appUser.setTeam(team);
@@ -99,7 +105,9 @@ public class UserServiceImp implements UserService {
         edit_user.setMail(appUser.getMail());
         edit_user.setTeam(team);
         edit_user.setStatus(appUser.getStatus());
-        edit_user.setPassword(appUser.getPassword());
+        if (appUser.getPassword() != null && !appUser.getPassword().isBlank()) {
+            edit_user.setPassword(passwordEncoder.encode(appUser.getPassword()));
+        }
         
         userRepository.save(edit_user);
         
@@ -118,4 +126,3 @@ public class UserServiceImp implements UserService {
     }
     
 }
-
