@@ -106,6 +106,14 @@
             box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
         }
 
+        /* Disabled input styling */
+        .form-group input:disabled {
+            background: #f4f4f5;
+            color: #aaa;
+            cursor: not-allowed;
+            border-color: #e4e4e7;
+        }
+
         .select-wrapper {
             position: relative;
         }
@@ -174,7 +182,6 @@
             transition: all 0.18s ease;
         }
 
-        /* Active option — green */
         .radio-option.is-active input[type="radio"]:checked + label {
             border-color: #16a34a;
             background: #f0fdf4;
@@ -192,7 +199,6 @@
             color: #16a34a;
         }
 
-        /* Inactive option — default blue */
         .radio-option input[type="radio"]:checked + label {
             border-color: #2563eb;
             background: #eff6ff;
@@ -257,9 +263,183 @@
             background: #f4f4f5;
         }
 
+        /* ── PASSWORD SECTION ── */
+        .password-section {
+            grid-column: 1 / -1;
+            background: #f8fafc;
+            border: 1.5px solid #e4e4e7;
+            border-radius: 12px;
+            padding: 20px;
+            transition: border-color 0.2s;
+        }
+
+        .password-section.is-open {
+            border-color: #2563eb;
+            background: #fafcff;
+        }
+
+        .password-toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .password-toggle-row .label-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .password-toggle-row .label-group strong {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .password-toggle-row .label-group span {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Toggle switch */
+        .toggle-switch {
+            position: relative;
+            width: 42px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            position: absolute;
+        }
+
+        .toggle-track {
+            position: absolute;
+            inset: 0;
+            background: #d1d5db;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle-track::after {
+            content: '';
+            position: absolute;
+            left: 3px;
+            top: 3px;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+
+        .toggle-switch input:checked + .toggle-track {
+            background: #2563eb;
+        }
+
+        .toggle-switch input:checked + .toggle-track::after {
+            transform: translateX(18px);
+        }
+
+        /* Password fields that appear on toggle */
+        .password-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+            transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.3s ease;
+        }
+
+        .password-fields.visible {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 18px;
+        }
+
+        /* Input with eye button wrapper */
+        .input-eye-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-eye-wrapper input {
+            padding-right: 42px !important;
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 11px;
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: color 0.15s;
+            flex: unset;
+            width: auto;
+        }
+
+        .eye-btn:hover { color: #555; }
+
+        .eye-btn svg { width: 17px; height: 17px; display: block; }
+
+        /* Strength bar */
+        .strength-bar-wrap {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .strength-bar-track {
+            height: 4px;
+            background: #e4e4e7;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .strength-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+
+        .strength-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: #aaa;
+            transition: color 0.3s;
+        }
+
+        /* Mismatch hint */
+        .match-hint {
+            grid-column: 1 / -1;
+            font-size: 12px;
+            font-weight: 500;
+            min-height: 16px;
+        }
+
+        .match-hint.ok   { color: #16a34a; }
+        .match-hint.fail { color: #dc2626; }
+
         @media (max-width: 520px) {
             .form-container { padding: 28px 20px; }
             .form-grid { grid-template-columns: 1fr; }
+            .password-fields { grid-template-columns: 1fr; }
         }
         </style>
     </head>
@@ -281,20 +461,14 @@
                     <div class="form-group">
                         <input type="hidden" th:field="*{id}">
                         <label class="field-label" for="username">Username *</label>
-                        <input type="text" id="username" th:field="*{username}" placeholder="e.g. john_doe">
+                        <input type="text" id="username" th:field="*{username}">
                         <span class="text-danger" th:errors="*{username}"></span>
                     </div>
 
                     <div class="form-group">
                         <label class="field-label" for="mail">Email *</label>
-                        <input type="text" id="mail" th:field="*{mail}" placeholder="john@company.com">
+                        <input type="text" id="mail" th:field="*{mail}">
                         <span class="text-danger" th:errors="*{mail}"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="field-label" for="password">Password *</label>
-                        <input type="password" id="password" th:field="*{password}" placeholder="••••••••">
-                        <span class="text-danger" th:errors="*{password}"></span>
                     </div>
 
                     <div class="form-group">
@@ -338,13 +512,190 @@
                         <span class="text-danger" th:errors="*{status}"></span>
                     </div>
 
+                    <!-- ── PASSWORD SECTION ── -->
+                    <div class="password-section" id="passwordSection">
+
+                        <!-- Toggle row -->
+                        <div class="password-toggle-row">
+                            <div class="label-group">
+                                <strong>Password</strong>
+                                <span id="pwSubtitle">Click the toggle to set a new password</span>
+                            </div>
+                            <label class="toggle-switch" title="Change password">
+                                <input type="checkbox" id="changePasswordToggle">
+                                <span class="toggle-track"></span>
+                            </label>
+                        </div>
+
+                        <!-- Hidden fields — revealed on toggle -->
+                        <div class="password-fields" id="passwordFields">
+
+                            <div class="form-group">
+                                <label class="field-label" for="newPassword">New Password</label>
+                                <div class="input-eye-wrapper">
+                                    <input type="password" id="newPassword" name="password"
+                                           placeholder="Enter new password" autocomplete="new-password">
+                                    <button type="button" class="eye-btn" onclick="toggleEye('newPassword', this)" tabindex="-1" aria-label="Show/hide password">
+                                        <svg id="eyeIcon-newPassword" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="field-label" for="confirmPassword">Confirm Password</label>
+                                <div class="input-eye-wrapper">
+                                    <input type="password" id="confirmPassword" name="confirmPassword"
+                                           placeholder="Repeat new password" autocomplete="new-password">
+                                    <button type="button" class="eye-btn" onclick="toggleEye('confirmPassword', this)" tabindex="-1" aria-label="Show/hide password">
+                                        <svg id="eyeIcon-confirmPassword" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Strength bar -->
+                            <div class="strength-bar-wrap">
+                                <div class="strength-bar-track">
+                                    <div class="strength-bar-fill" id="strengthFill"></div>
+                                </div>
+                                <span class="strength-label" id="strengthLabel">Password strength</span>
+                            </div>
+
+                            <!-- Match hint -->
+                            <div class="match-hint" id="matchHint"></div>
+
+                        </div>
+                    </div>
+                    <!-- ── END PASSWORD SECTION ── -->
+
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <button type="submit" class="btn-primary" id="submitBtn">Save Changes</button>
                 </div>
 
             </form>
         </div>
+
+        <script>
+        const toggle      = document.getElementById('changePasswordToggle');
+        const section     = document.getElementById('passwordSection');
+        const fields      = document.getElementById('passwordFields');
+        const newPw       = document.getElementById('newPassword');
+        const confirmPw   = document.getElementById('confirmPassword');
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthLabel = document.getElementById('strengthLabel');
+        const matchHint   = document.getElementById('matchHint');
+        const pwSubtitle  = document.getElementById('pwSubtitle');
+        const submitBtn   = document.getElementById('submitBtn');
+
+        /* ── Toggle open/close ── */
+        toggle.addEventListener('change', () => {
+            const open = toggle.checked;
+            fields.classList.toggle('visible', open);
+            section.classList.toggle('is-open', open);
+            pwSubtitle.textContent = open
+                ? 'Fill in a new password below'
+                : 'Click the toggle to set a new password';
+
+            if (!open) {
+                // Clear fields & reset UI when closed
+                newPw.value = '';
+                confirmPw.value = '';
+                resetStrength();
+                matchHint.textContent = '';
+                matchHint.className = 'match-hint';
+            } else {
+                newPw.focus();
+            }
+        });
+
+        /* ── Show / hide eye ── */
+        function toggleEye(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+
+            const icon = btn.querySelector('svg');
+            icon.innerHTML = isHidden
+                ? /* eye-off */
+                  `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                   <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                   <line x1="1" y1="1" x2="23" y2="23"/>`
+                : /* eye */
+                  `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+        }
+
+        /* ── Strength checker ── */
+        newPw.addEventListener('input', () => {
+            const val = newPw.value;
+            const score = getStrength(val);
+            const levels = [
+                { w: '0%',   color: '#e4e4e7', text: 'Password strength' },
+                { w: '25%',  color: '#ef4444', text: 'Weak' },
+                { w: '50%',  color: '#f97316', text: 'Fair' },
+                { w: '75%',  color: '#eab308', text: 'Good' },
+                { w: '100%', color: '#22c55e', text: 'Strong' },
+            ];
+            const lvl = levels[score];
+            strengthFill.style.width    = lvl.w;
+            strengthFill.style.background = lvl.color;
+            strengthLabel.textContent   = lvl.text;
+            strengthLabel.style.color   = score === 0 ? '#aaa' : lvl.color;
+            checkMatch();
+        });
+
+        confirmPw.addEventListener('input', checkMatch);
+
+        function getStrength(pw) {
+            if (!pw) return 0;
+            let s = 0;
+            if (pw.length >= 8)               s++;
+            if (/[A-Z]/.test(pw))             s++;
+            if (/[0-9]/.test(pw))             s++;
+            if (/[^A-Za-z0-9]/.test(pw))      s++;
+            return s;
+        }
+
+        function checkMatch() {
+            if (!confirmPw.value) { matchHint.textContent = ''; matchHint.className = 'match-hint'; return; }
+            const match = newPw.value === confirmPw.value;
+            matchHint.textContent = match ? '✓ Passwords match' : '✗ Passwords do not match';
+            matchHint.className   = 'match-hint ' + (match ? 'ok' : 'fail');
+        }
+
+        function resetStrength() {
+            strengthFill.style.width = '0%';
+            strengthFill.style.background = '#e4e4e7';
+            strengthLabel.textContent = 'Password strength';
+            strengthLabel.style.color = '#aaa';
+        }
+
+        /* ── Block submit if toggle on but passwords invalid ── */
+        document.getElementById('UserForm').addEventListener('submit', (e) => {
+            if (!toggle.checked) {
+                // Clear the password field so backend keeps old hash
+                newPw.name = '';
+                confirmPw.name = '';
+                return;
+            }
+            if (!newPw.value) {
+                e.preventDefault();
+                newPw.focus();
+                matchHint.textContent = '✗ Please enter a new password';
+                matchHint.className = 'match-hint fail';
+                return;
+            }
+            if (newPw.value !== confirmPw.value) {
+                e.preventDefault();
+                confirmPw.focus();
+                matchHint.textContent = '✗ Passwords do not match';
+                matchHint.className = 'match-hint fail';
+            }
+        });
+        </script>
     </body>
 </html>
