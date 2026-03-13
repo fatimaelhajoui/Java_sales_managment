@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head>
+        <title>Login</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+        <style>
+        *, *::before, *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+            width: 100%;
+            max-width: 420px;
+            padding: 48px 40px;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-header {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .login-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111;
+            letter-spacing: -0.3px;
+            margin-bottom: 4px;
+        }
+
+        .login-header p {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 13px;
+            font-size: 14px;
+            font-family: inherit;
+            border: 1.5px solid #e4e4e7;
+            border-radius: 8px;
+            background: #fafafa;
+            color: #111;
+            outline: none;
+            transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+        }
+
+        .form-group input:focus {
+            border-color: #2563eb;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
+        }
+
+        .form-group input[type="password"],
+        .form-group input[type="text"] {
+            padding-right: 42px;
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            border-radius: 4px;
+            transition: color 0.15s;
+        }
+
+        .eye-btn:hover { color: #555; }
+        .eye-btn svg { width: 17px; height: 17px; display: block; }
+
+        .alert {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            border: 1.5px solid #fca5a5;
+            color: #dc2626;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border: 1.5px solid #86efac;
+            color: #16a34a;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 11px 20px;
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.18s, box-shadow 0.18s, transform 0.1s;
+        }
+
+        .btn-login:hover {
+            background: #1d4ed8;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+        }
+
+        .btn-login:active { transform: scale(0.98); }
+        </style>
+    </head>
+    <body>
+
+        <div class="login-card">
+
+            <div class="login-header">
+                <h1>Welcome back</h1>
+                <p>Sign in to your account to continue</p>
+            </div>
+
+            <div th:if="${param.error}" class="alert alert-error">
+                Invalid username or password. Please try again.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success">
+                You have been logged out successfully.
+            </div>
+
+            <form th:action="@{/login}" method="post">
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username"
+                           placeholder="Enter your username" autocomplete="username" />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password"
+                               placeholder="Enter your password" autocomplete="current-password" />
+                        <button type="button" class="eye-btn" onclick="toggleEye()" tabindex="-1" aria-label="Show/hide password">
+                            <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login">Sign In</button>
+
+            </form>
+        </div>
+
+        <script>
+        function toggleEye() {
+            const input = document.getElementById('password');
+            const icon  = document.getElementById('eyeIcon');
+            const show  = input.type === 'password';
+            input.type  = show ? 'text' : 'password';
+            icon.innerHTML = show
+                ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                   <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                   <line x1="1" y1="1" x2="23" y2="23"/>`
+                : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+        }
+        </script>
+
+    </body>
+</html>
