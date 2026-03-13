@@ -259,6 +259,69 @@
             background: #f4f4f5;
         }
 
+        /* ── Eye button ── */
+        .input-eye-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-eye-wrapper input {
+            padding-right: 42px !important;
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 11px;
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            border-radius: 4px;
+            transition: color 0.15s;
+            flex: unset;
+            width: auto;
+        }
+
+        .eye-btn:hover { color: #555; }
+        .eye-btn svg { width: 17px; height: 17px; display: block; }
+
+        /* ── Strength bar ── */
+        .strength-bar-track {
+            height: 4px;
+            background: #e4e4e7;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .strength-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+
+        .strength-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: #aaa;
+            transition: color 0.3s;
+        }
+
+        /* ── Match hint ── */
+        .match-hint {
+            font-size: 12px;
+            font-weight: 500;
+            min-height: 16px;
+        }
+
+        .match-hint.ok   { color: #16a34a; }
+        .match-hint.fail { color: #dc2626; }
+
         @media (max-width: 520px) {
             .form-container { padding: 28px 20px; }
             .form-grid { grid-template-columns: 1fr; }
@@ -291,13 +354,43 @@
                         <span class="text-danger" th:errors="*{mail}"></span>
                     </div>
 
-                    <!-- Password + Role -->
+                    <!-- Password -->
                     <div class="form-group">
                         <label class="field-label" for="password">Password *</label>
-                        <input type="password" id="password" th:field="*{password}" placeholder="••••••••">
+                        <div class="input-eye-wrapper">
+                            <input type="password" id="password" th:field="*{password}" placeholder="••••••••" autocomplete="new-password">
+                            <button type="button" class="eye-btn" onclick="toggleEye('password', this)" tabindex="-1" aria-label="Show/hide password">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
                         <span class="text-danger" th:errors="*{password}"></span>
                     </div>
 
+                    <!-- Confirm Password -->
+                    <div class="form-group">
+                        <label class="field-label" for="confirmPassword">Confirm Password *</label>
+                        <div class="input-eye-wrapper">
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="••••••••" autocomplete="new-password">
+                            <button type="button" class="eye-btn" onclick="toggleEye('confirmPassword', this)" tabindex="-1" aria-label="Show/hide password">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <span class="match-hint" id="matchHint"></span>
+                    </div>
+
+                    <!-- Strength bar — spans full width -->
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <div class="strength-bar-track">
+                            <div class="strength-bar-fill" id="strengthFill"></div>
+                        </div>
+                        <span class="strength-label" id="strengthLabel">Password strength</span>
+                    </div>
+
+                    
                     <div class="form-group">
                          <label class="field-label" for="role">Role *</label>
                             <div class="select-wrapper">
@@ -345,5 +438,77 @@
                 
             </form>
         </div>
+        <script>
+        const pwInput     = document.getElementById('password');
+        const confirmPw   = document.getElementById('confirmPassword');
+        const strengthFill  = document.getElementById('strengthFill');
+        const strengthLabel = document.getElementById('strengthLabel');
+        const matchHint     = document.getElementById('matchHint');
+
+        /* ── Show / hide eye ── */
+        function toggleEye(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+            const icon = btn.querySelector('svg');
+            icon.innerHTML = isHidden
+                ? `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                   <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                   <line x1="1" y1="1" x2="23" y2="23"/>`
+                : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+        }
+
+        /* ── Strength checker ── */
+        pwInput.addEventListener('input', () => {
+            const score = getStrength(pwInput.value);
+            const levels = [
+                { w: '0%',   color: '#e4e4e7', text: 'Password strength' },
+                { w: '25%',  color: '#ef4444', text: 'Weak' },
+                { w: '50%',  color: '#f97316', text: 'Fair' },
+                { w: '75%',  color: '#eab308', text: 'Good' },
+                { w: '100%', color: '#22c55e', text: 'Strong' },
+            ];
+            const lvl = levels[score];
+            strengthFill.style.width      = lvl.w;
+            strengthFill.style.background = lvl.color;
+            strengthLabel.textContent     = lvl.text;
+            strengthLabel.style.color     = score === 0 ? '#aaa' : lvl.color;
+            checkMatch();
+        });
+
+        confirmPw.addEventListener('input', checkMatch);
+
+        function getStrength(pw) {
+            if (!pw) return 0;
+            let s = 0;
+            if (pw.length >= 8)          s++;
+            if (/[A-Z]/.test(pw))        s++;
+            if (/[0-9]/.test(pw))        s++;
+            if (/[^A-Za-z0-9]/.test(pw)) s++;
+            return s;
+        }
+
+        function checkMatch() {
+            if (!confirmPw.value) { matchHint.textContent = ''; matchHint.className = 'match-hint'; return; }
+            const ok = pwInput.value === confirmPw.value;
+            matchHint.textContent = ok ? '✓ Passwords match' : '✗ Passwords do not match';
+            matchHint.className   = 'match-hint ' + (ok ? 'ok' : 'fail');
+        }
+
+        /* ── Block submit if passwords don't match ── */
+        document.getElementById('UserForm').addEventListener('submit', (e) => {
+            if (!pwInput.value) {
+                e.preventDefault();
+                pwInput.focus();
+                return;
+            }
+            if (pwInput.value !== confirmPw.value) {
+                e.preventDefault();
+                confirmPw.focus();
+                matchHint.textContent = '✗ Passwords do not match';
+                matchHint.className   = 'match-hint fail';
+            }
+        });
+        </script>
     </body>
 </html>
