@@ -37,7 +37,7 @@ public class AppUser {
     private String mail;
     
     @NotEmpty(message = "role is required")
-    private String role;
+    private String role="AGENT";
     
     @Column(name = "status", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean status = false;
@@ -50,4 +50,3 @@ public class AppUser {
         return team.getName();
     }
 }
-
