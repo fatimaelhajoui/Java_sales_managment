@@ -6,6 +6,7 @@ package net.elhajoui.sales.controllers;
 
 import jakarta.validation.Valid;
 import net.elhajoui.sales.abstracts.UserService;
+import net.elhajoui.sales.dto.UpdateAppUerDto;
 import net.elhajoui.sales.entities.AppUser;
 import net.elhajoui.sales.repositories.TeamRepository;
 import net.elhajoui.sales.repositories.UserRepository;
@@ -77,7 +78,7 @@ public class UserController {
     }
     
      @PostMapping("/users/update")
-    public String updateAppUser(@Valid AppUser appUser, BindingResult bindingResult, Model model,
+    public String updateAppUser(@Valid UpdateAppUerDto updateAppUerDto, BindingResult bindingResult, Model model,
                         @RequestParam(name= "keyword", defaultValue = "")String keyword,
                         @RequestParam(name= "page", defaultValue = "0")int page, 
                         @RequestParam(name= "size", defaultValue = "5") int size,
@@ -87,11 +88,11 @@ public class UserController {
         if (teamId != null) {
             net.elhajoui.sales.entities.Team t = new net.elhajoui.sales.entities.Team();
             t.setId(teamId);
-            appUser.setTeam(t);
+            updateAppUerDto.setTeam(t);
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("my_user", appUser);
+            model.addAttribute("my_user", updateAppUerDto);
             model.addAttribute("teams", teamRepository.findAll());
             model.addAttribute("currentPage", page);
             model.addAttribute("keyword", keyword);
@@ -99,10 +100,10 @@ public class UserController {
         }
 
         try {
-            userService.updateAppUser(appUser.getId(), appUser);
+            userService.updateAppUser(updateAppUerDto.getId(), updateAppUerDto);
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            model.addAttribute("my_user", appUser);
+            model.addAttribute("my_user", updateAppUerDto);
             model.addAttribute("teams", teamRepository.findAll());
             model.addAttribute("currentPage", page);
             model.addAttribute("keyword", keyword);
@@ -113,6 +114,10 @@ public class UserController {
     }
     
     
-    
+    @PostMapping("/users/delete")
+    public String userDelete(@RequestParam Long user_id) {
+       userService.deleteAppUser(user_id);
+        return "redirect:/users";
+    }
     
 }
