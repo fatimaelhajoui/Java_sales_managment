@@ -3,9 +3,12 @@
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
 -->
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{main/layout}">
     <head>
         <title>Teams List</title>
+        <th:block layout:fragment="head">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
@@ -18,14 +21,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e8e8e8;
-            color: #000;
-            padding: 20px;
-            min-height: 100vh;
-        }
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #e8e8e8;
+                color: #000;
+                padding: 20px;
+                min-height: 100vh;
+            }
+        /* body styles are controlled by layout.html — do not override here */
 
         .container {
             max-width: 1200px;
@@ -263,6 +266,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     border-right: none;
     }
 
+        /* body styles are controlled by layout.html — do not override here */
+
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
@@ -282,11 +287,13 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             .header h1 {
                 font-size: 24px;
             }
-            
         }
     </style>
+        </th:block>
     </head>
     <body>
+        <th:block layout:fragment="page-title">Teams Management</th:block>
+        <div layout:fragment="content">
         <div class="container">
         <div class="header">
             
@@ -397,35 +404,38 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 <form id="deleteForm" method="post">
     <input type="hidden" name="_method" value="delete"/>
 </form>
-    </div>
-    </div>
-<script>
+    </div><!-- /container -->
+    </div><!-- /content fragment -->
+
+    <th:block layout:fragment="scripts">
+    <script>
     let teamToDeleteId = null;
-let teamToDeleteRow = null;
+    let teamToDeleteRow = null;
 
-function openDeleteModal(btn) {
-    teamToDeleteId = btn.getAttribute('data-id');
-    teamToDeleteRow = btn.closest('tr');
-    document.getElementById('modalMessage').textContent = 
-        `Do you want to delete "${btn.getAttribute('data-name')}"?`;
-    document.getElementById('deleteModal').style.display = 'flex';
-}
+    function openDeleteModal(btn) {
+        teamToDeleteId = btn.getAttribute('data-id');
+        teamToDeleteRow = btn.closest('tr');
+        document.getElementById('modalMessage').textContent =
+            `Do you want to delete "${btn.getAttribute('data-name')}"?`;
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
 
-function cancelDelete() {
-    document.getElementById('deleteModal').style.display = 'none';
-    teamToDeleteId = null;
-    teamToDeleteRow = null;
-}
+    function cancelDelete() {
+        document.getElementById('deleteModal').style.display = 'none';
+        teamToDeleteId = null;
+        teamToDeleteRow = null;
+    }
 
-function confirmDelete() {
-    // Set the form action dynamically and submit
-    document.getElementById('deleteForm').action = '/teams/delete?team_id=' + teamToDeleteId;
-    document.getElementById('deleteForm').submit();
-}
+    function confirmDelete() {
+        document.getElementById('deleteForm').action = '/teams/delete?team_id=' + teamToDeleteId;
+        document.getElementById('deleteForm').submit();
+    }
 
-document.getElementById('deleteModal').addEventListener('click', function(e) {
-    if (e.target === this) cancelDelete();
-});
-</script>
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+        if (e.target === this) cancelDelete();
+    });
+    </script>
+    </th:block>
+
     </body>
 </html>
