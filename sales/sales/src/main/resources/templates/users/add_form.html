@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{main/layout}">
     <head>
+        <th:block layout:fragment="head">
         <title>Add New User</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +13,14 @@
             margin: 0; padding: 0; box-sizing: border-box;
         }
 
-        body {
-            font-family: 'DM Sans', -apple-system, sans-serif;
-            background: #f0f2f5;
-            min-height: 100vh;
+        /* body styles are controlled by layout.html — do not override here */
+
+        /* ── Centering wrapper inside the layout's page-content ── */
+        .form-page-wrapper {
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: flex-start;
+            min-height: calc(100vh - 64px); /* subtract topbar height */
             padding: 32px 20px;
         }
 
@@ -327,9 +331,13 @@
             .form-grid { grid-template-columns: 1fr; }
         }
         </style>
+            </th:block>
     </head>
 
     <body>
+        <div layout:fragment="content">
+        <!-- Centering wrapper: works inside the layout's .page-content area -->
+        <div class="form-page-wrapper">
         <div class="form-container">
 
             <div class="form-header">
@@ -421,7 +429,7 @@
                                 <input type="radio" id="statusActive" th:field="*{status}" value="true">
                                 <label for="statusActive">Active</label>
                             </div>
-                            <div class="radio-option is-active">
+                            <div class="radio-option">
                                 <input type="radio" id="statusInactive" th:field="*{status}" value="false">
                                 <label for="statusInactive">Inactive</label>
                             </div>
@@ -437,7 +445,11 @@
                 </div>
                 
             </form>
-        </div>
+        </div><!-- /form-container -->
+        </div><!-- /form-page-wrapper -->
+        </div><!-- /content fragment -->
+        
+        <th:block layout:fragment="scripts">
         <script>
         const pwInput     = document.getElementById('password');
         const confirmPw   = document.getElementById('confirmPassword');
@@ -510,5 +522,7 @@
             }
         });
         </script>
+        </th:block>
+
     </body>
 </html>
