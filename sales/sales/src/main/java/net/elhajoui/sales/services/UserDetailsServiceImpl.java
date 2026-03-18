@@ -32,6 +32,12 @@ public class UserDetailsServiceImpl implements UserDetailsService{
         }
         
         AppUser appUser = account.get();
+
+        //only the active can login
+        if(appUser.getStatus()== false){
+            throw new UsernameNotFoundException("User is inactive: "+username);
+        }
+        
         return org.springframework.security.core.userdetails.User
             .withUsername(appUser.getUsername())
             .password(appUser.getPassword())
