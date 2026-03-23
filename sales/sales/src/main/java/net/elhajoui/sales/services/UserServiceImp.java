@@ -38,8 +38,11 @@ public class UserServiceImp implements UserService {
     
 
     @Override
-    public Page<AppUser> AllUsers(String keyword,int page, int size) {
-        Page<AppUser> Users= userRepository.findByUsernameContaining(keyword, PageRequest.of(page, size));
+    public Page<AppUser> AllUsers(Long userId,String keyword,int page, int size) {
+        AppUser loggedInUser = userRepository.findById(userId)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        Page<AppUser> Users= userRepository.findByTeamIdAndUsernameContaining(loggedInUser.getTeam().getId(),keyword, PageRequest.of(page, size));
         return Users;
     }
 
