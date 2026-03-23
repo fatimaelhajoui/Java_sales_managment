@@ -38,11 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
             throw new UsernameNotFoundException("User is inactive: "+username);
         }
         
-        return org.springframework.security.core.userdetails.User
-            .withUsername(appUser.getUsername())
-            .password(appUser.getPassword())
-            .roles(appUser.getRole())
-            .build();
+        return new CustomUserDetails(appUser);
 
     }
     
