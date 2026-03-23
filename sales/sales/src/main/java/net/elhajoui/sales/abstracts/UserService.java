@@ -13,7 +13,7 @@ import org.springframework.data.domain.Page;
  * @author marwa
  */
 public interface UserService {
-    Page<AppUser> AllUsers(String keyword,int page, int size);
+    Page<AppUser> AllUsers(Long userId, String keyword,int page, int size);
     AppUser createAppUser(AppUser appUser);
     AppUser editAppUser(Long appUser_id);
     AppUser updateAppUser(Long appUser_id,AppUser appUser);
