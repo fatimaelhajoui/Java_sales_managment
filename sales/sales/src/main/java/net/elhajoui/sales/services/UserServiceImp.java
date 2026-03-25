@@ -42,8 +42,12 @@ public class UserServiceImp implements UserService {
         AppUser loggedInUser = userRepository.findById(userId)
         .orElseThrow(() -> new RuntimeException("User not found"));
         
-        Page<AppUser> Users= userRepository.findByTeamIdAndUsernameContaining(loggedInUser.getTeam().getId(),keyword, PageRequest.of(page, size));
-        return Users;
+        if(("ADMIN").equalsIgnoreCase(loggedInUser.getRole())){
+            return userRepository.findByUsernameContaining(keyword, PageRequest.of(page, size));
+        }else{
+           return  userRepository.findByTeamIdAndUsernameContaining(loggedInUser.getTeam().getId(),keyword, PageRequest.of(page, size));
+        }
+        
     }
 
     @Override
