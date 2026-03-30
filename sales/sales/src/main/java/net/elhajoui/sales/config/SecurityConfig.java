@@ -38,11 +38,14 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> {
              auth.requestMatchers("/login/**").permitAll()
                 //for table Team    
-                .requestMatchers(HttpMethod.GET, "/teams/**").hasRole("MANAGER")
-                .requestMatchers(HttpMethod.POST, "/teams/**").hasRole("MANAGER")
+                .requestMatchers(HttpMethod.GET, "/teams/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/teams/**").hasRole("ADMIN")
                 //for table AppUser 
-                .requestMatchers(HttpMethod.GET, "/users/**").hasRole("MANAGER")
-                .requestMatchers(HttpMethod.POST, "/users/**").hasRole("MANAGER")
+                .requestMatchers(HttpMethod.GET, "/users/**").hasAnyRole("ADMIN", "MANAGER")
+                .requestMatchers(HttpMethod.POST, "/users/**").hasAnyRole("ADMIN", "MANAGER")
+                //for table Sale 
+                .requestMatchers(HttpMethod.GET, "/sales/add_sale").hasRole("AGENT")
+                .requestMatchers(HttpMethod.POST, "/sales/save").hasRole("AGENT")
                 
                 .anyRequest().authenticated();
                 
@@ -66,4 +69,3 @@ public class SecurityConfig {
             return http.build();
     }
 }
-
