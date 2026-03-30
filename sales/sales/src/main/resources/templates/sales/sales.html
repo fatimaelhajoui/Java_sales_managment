@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      layout:decorate="~{main/layout}">
+    <head>
+        <title>Sales List</title>
+        <th:block layout:fragment="head">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #e8e8e8;
+                color: #000;
+                padding: 20px;
+                min-height: 100vh;
+            }
+        /* body styles are controlled by layout.html — do not override here */
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .add-user-btn {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-user-btn:hover {
+            background-color: #0052a3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+            text-decoration: none;
+        }
+
+        .add-user-btn:active {
+            transform: translateY(0);
+            text-decoration: none;
+        }
+
+        .table-wrapper {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f5f5f5;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #000;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #e8e8e8;
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        td {
+            padding: 16px;
+            color: #000;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background-color: #d4f4dd;
+            color: #0d6f3c;
+        }
+
+        .status-inactive {
+            background-color: #fce4e6;
+            color: #b71c1c;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .action-btn {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #0052a3;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .delete-btn {
+            background-color: #d32f2f;
+        }
+
+        .delete-btn:hover {
+            background-color: #b71c1c;
+            box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 24px 0 8px;
+  }
+
+  .page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    background: #ffffff;
+    color: #475569;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.18s ease;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+  }
+
+  .page-btn:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+    color: #1e293b;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .page-btn.active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    transform: translateY(-1px);
+  }
+
+  .page-btn.active:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+  }
+
+  .page-btn.disabled {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .page-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .page-info {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 0 4px;
+    font-family: 'DM Sans', sans-serif;
+
+      }
+      
+   .search-container .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+    }
+
+    .search-container .input-group-text {
+    border-right: none;
+    }
+
+        /* body styles are controlled by layout.html — do not override here */
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                align-items: flex-start;
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+            }
+
+            th, td {
+                padding: 12px;
+                font-size: 13px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+        </th:block>
+    </head>
+    <body>
+        <th:block layout:fragment="page-title">Sales Management</th:block>
+        <div layout:fragment="content">
+        <div class="container">
+        <div class="header">
+            
+            <h1>My Sales Management</h1>
+            <a class="add-user-btn" th:href="@{/sales/add_sale}" style="text-decoration: none">
+                <i class="fas fa-plus"></i> Add Sale
+            </a>
+        </div>
+            
+        <!-- Search Bar -->
+        <div class="search-container mb-4">
+            <form method="get" th:action="@{/my_sales}" class="row g-2 align-items-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="text" id="keyword" name="keyword" th:value="${keyword}" class="form-control border-start-0 ps-0 shadow-none" 
+                               placeholder="Search sale by contract ID..." autocomplete="off">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+                <div class="col-auto">
+                        <a th:href="@{/my_sales}" class="btn btn-outline-secondary">Clear</a>
+                </div>
+            </form>
+       </div>
+
+
+        <div class="table-wrapper">
+            <table id="usersTable">
+                <thead>
+                    <tr>
+                        <th>Contract ID</th> 
+                        <th>Status</th>
+                        <th>Date of Creation</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- My data -->
+                    <tr th:each="s:${saleslist}"> 
+                        <td th:text="${s.contractid}"></td>
+                        <td th:text="${s.status}"></td>
+                        <td th:text="${s.uploaded_at}"></td>
+                        <td>
+                            <div class="actions">
+                                <button class="action-btn delete-btn" th:data-id="${t.id}" th:data-name="${t.name}" onclick="openDeleteModal(this)" title="Delete">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+<div class="pagination-wrapper" th:if="${totalPages.length > 1}">
+
+  <!-- Previous button -->
+  <a class="page-btn"
+     th:classappend="${currentPage == 0} ? 'disabled'"
+     th:href="@{/my_sales(page=${currentPage - 1}, size=5)}">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+  </a>
+
+  <!-- Page number buttons -->
+  <th:block th:each="page, status : ${totalPages}">
+    <a class="page-btn"
+       th:classappend="${status.index == currentPage} ? 'active'"
+       th:href="@{/my_sales(page=${status.index}, size=5)}"
+       th:text="${status.index + 1}">
+    </a>
+  </th:block>
+
+  <!-- Next button -->
+  <a class="page-btn"
+     th:classappend="${currentPage == totalPages.length - 1} ? 'disabled'"
+     th:href="@{/my_sales(page=${currentPage + 1}, size=5)}">
+    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  </a>
+
+</div>
+
+<!-- ─── Page info label (optional, shows "Page 1 of 2") ─── -->
+<p class="page-info text-center"
+   th:text="'Page ' + (${currentPage + 1}) + ' of ' + ${totalPages.length}"
+   th:if="${totalPages.length > 1}">
+</p>
+        </div>
+       
+
+
+    </div><!-- /container -->
+    </div><!-- /content fragment -->
+
+    <th:block layout:fragment="scripts">
+    <script>
+   
+    </script>
+    </th:block>
+
+    </body>
+</html>
