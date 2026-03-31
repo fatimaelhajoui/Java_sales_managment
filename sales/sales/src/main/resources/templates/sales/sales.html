@@ -171,12 +171,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             transform: scale(0.95);
         }
 
-        .delete-btn {
-            background-color: #d32f2f;
+        .ifos-btn {
+            background-color:#497fba;
         }
 
-        .delete-btn:hover {
-            background-color: #b71c1c;
+        .info-btn:hover {
+            background-color:#6394c9 ;
             box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
         }
 
@@ -254,6 +254,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     color: #94a3b8;
     margin: 0 4px;
     font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
 
       }
       
@@ -266,6 +267,45 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
     border-right: none;
     }
 
+    /* Status Badge Base */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* Status-specific Colors */
+.status-pending {
+    background-color: #fff8e1;
+    color: #f57f17;
+}
+.status-pending::before {
+    content: '●';
+    font-size: 10px;
+}
+
+.status-confirmed {
+    background-color: #d4f4dd;
+    color: #0d6f3c;
+}
+.status-confirmed::before {
+    content: '●';
+    font-size: 10px;
+}
+
+.status-rejected {
+    background-color: #fce4e6;
+    color: #b71c1c;
+}
+.status-rejected::before {
+    content: '●';
+    font-size: 10px;
+}
         /* body styles are controlled by layout.html — do not override here */
 
         @media (max-width: 768px) {
@@ -330,23 +370,30 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         <th>Contract ID</th> 
                         <th>Status</th>
                         <th>Date of Creation</th>
+                        <th> </th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    <!-- My data -->
                     <tr th:each="s:${saleslist}"> 
-                        <td th:text="${s.contractid}"></td>
-                        <td th:text="${s.status}"></td>
-                        <td th:text="${s.uploaded_at}"></td>
+                        <td th:text="${s.contractId}"></td>
+                        <td>
+                            <span class="status-badge" 
+                                  th:classappend="${#strings.toLowerCase(s.status) == 'pending' ? 'status-pending' : 
+                                   (#strings.toLowerCase(s.status) == 'confirmed' ? 'status-confirmed' : 
+                                   (#strings.toLowerCase(s.status) == 'rejected' ? 'status-rejected' : ''))}"
+                                    th:text="${s.status}">
+                            </span>
+                        </td>
+                        <td th:text="${s.uploadedAt}"></td>
                         <td>
                             <div class="actions">
-                                <button class="action-btn delete-btn" th:data-id="${t.id}" th:data-name="${t.name}" onclick="openDeleteModal(this)" title="Delete">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
+                                <a class="action-btn info-btn" th:href="@{/agent/my_sale(saleId=${s.id})}" title="view">
+                                <i class="fa-regular fa-eye"></i>
+                                </a>
                             </div>
                         </td>
                     </tr>
-                </tbody>
+</tbody>
             </table>
             
 <div class="pagination-wrapper" th:if="${totalPages.length > 1}">
