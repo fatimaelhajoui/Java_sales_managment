@@ -17,24 +17,24 @@ import org.springframework.data.domain.Page;
  * @author marwa
  */
 public interface SaleService {
-    // Agent uploads a file with a contractId
-    Sale uploadSale(MultipartFile file, String contractId, String username) throws IOException;
-
-    // Admin downloads a file by sale ID
+    
+    //manager
     Resource downloadFile(Long saleId) throws IOException;
 
-    // Admin lists all sales
     List<Sale> getAllSales();
 
-    // Admin gets a single sale by ID
-    Sale getSaleById(Long id);
-
-    // Admin updates status (APPROVED / REJECTED)
-      Sale updateStatus(Long id, SaleStatus status);
-
-    // Agent lists only their own sales
-    Page<Sale> getSalesByAgent(Long userId, String keyword,int page, int size);
-
-    // Delete a sale and its file from disk
+    Sale updateStatus(Long id, SaleStatus status);
+    
     void deleteSale(Long id) throws IOException;
+    
+    Sale getSaleById(Long id);
+    
+    //agent
+    Sale uploadSale(MultipartFile file, String contractId, String username) throws IOException;
+    
+    Page<Sale> getSalesByAgent(Long userId, String keyword,int page, int size);
+    
+    Sale getSaleByIdAndAgent(Long agent_id, Long id);
+
+    
 }
