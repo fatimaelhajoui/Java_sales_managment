@@ -105,7 +105,7 @@ public class SaleServiceImp implements SaleService{
 
     @Override
     public Sale getSaleById(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return saleRepository.findById(id).orElseThrow(() -> new RuntimeException("this sale not exist!"));
     }
 
     @Override
@@ -122,6 +122,11 @@ public class SaleServiceImp implements SaleService{
     @Override
     public void deleteSale(Long id) throws IOException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Sale getSaleByIdAndAgent(Long agent_id, Long id) {
+        return saleRepository.findByAgent_IdAndId(agent_id, id);
     }
     
 }
