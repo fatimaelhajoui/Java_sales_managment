@@ -44,9 +44,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/users/**").hasAnyRole("ADMIN", "MANAGER")
                 .requestMatchers(HttpMethod.POST, "/users/**").hasAnyRole("ADMIN", "MANAGER")
                 //for table Sale 
-                .requestMatchers(HttpMethod.GET, "/sales/add_sale").hasRole("AGENT")
-                .requestMatchers(HttpMethod.POST, "/sales/save").hasRole("AGENT")
-                
+                .requestMatchers(HttpMethod.GET, "/agent/**").hasRole("AGENT")
+                .requestMatchers(HttpMethod.POST, "/agent/**").hasRole("AGENT")
+                .requestMatchers("/agent/sale/file/**").hasRole("AGENT")
                 .anyRequest().authenticated();
                 
             })
