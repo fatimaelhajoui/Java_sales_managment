@@ -49,7 +49,7 @@ public class Sale {
 
     private LocalDateTime uploadedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "agent_id", nullable = false)
     private AppUser agent;
 
