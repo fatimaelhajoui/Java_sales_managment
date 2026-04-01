@@ -18,16 +18,13 @@ import org.springframework.data.domain.Page;
  */
 public interface SaleService {
     
-    //manager
-    Resource downloadFile(Long saleId) throws IOException;
+    //manager & admin
 
-    List<Sale> getAllSales();
+    Page<Sale> getAllSales(Long user_id,String keyword,int page, int size);
 
-    Sale updateStatus(Long id, SaleStatus status);
+    Sale updateStatus(Long user_id,Long id, SaleStatus status);
     
-    void deleteSale(Long id) throws IOException;
-    
-    Sale getSaleById(Long id);
+    Sale getSaleById(Long user_id,Long id);
     
     //agent
     Sale uploadSale(MultipartFile file, String contractId, String username) throws IOException;
