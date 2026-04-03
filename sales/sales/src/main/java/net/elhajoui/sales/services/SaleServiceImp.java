@@ -50,7 +50,7 @@ public class SaleServiceImp implements SaleService{
     }
     
     @Override
-    public Sale uploadSale(MultipartFile file, String contractId, String username) throws IOException {
+    public Sale uploadSale(MultipartFile file, String contractId, String note, String username) throws IOException {
           // 1. Validate file is not empty
         if (file.isEmpty()) {
             throw new RuntimeException("Cannot upload an empty file");
@@ -88,6 +88,7 @@ public class SaleServiceImp implements SaleService{
         sale.setSize(file.getSize());
         sale.setContractId(contractId);
         sale.setAgent(agent);
+        sale.setNote(note);
         // status defaults to PENDING, uploadedAt set by @PrePersist
 
         return saleRepository.save(sale);
