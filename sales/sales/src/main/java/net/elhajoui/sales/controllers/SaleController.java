@@ -70,7 +70,7 @@ public class SaleController {
     public String saveSale(@Valid Sale sale,@RequestParam("file") MultipartFile file,
                            Authentication auth, BindingResult bindingResult, Model model) throws IOException{
         if(bindingResult.hasErrors()) return "/sales/add_sale";
-        saleServiceImp.uploadSale(file, sale.getContractId(), auth.getName());
+        saleServiceImp.uploadSale(file, sale.getContractId(), sale.getNote(), auth.getName());
         model.addAttribute("successMessage", "Sale uploaded successfully!");
         return "redirect:/agent/my_sales";
     }
