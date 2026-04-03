@@ -5,12 +5,15 @@
 package net.elhajoui.sales.controllers;
 
 import jakarta.validation.Valid;
+import java.util.List;
 import net.elhajoui.sales.abstracts.UserService;
 import net.elhajoui.sales.dto.UpdateAppUerDto;
 import net.elhajoui.sales.entities.AppUser;
 import net.elhajoui.sales.repositories.TeamRepository;
 import net.elhajoui.sales.repositories.UserRepository;
+import net.elhajoui.sales.services.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,7 +38,8 @@ public class UserController {
                         @RequestParam(name= "keyword", defaultValue = "")String keyword, 
                         @RequestParam(name= "page", defaultValue = "0")int page, 
                         @RequestParam(name= "size", defaultValue = "5") int size){
-         CustomUserDetails loggedInUser = (CustomUserDetails) SecurityContextHolder
+        
+        CustomUserDetails loggedInUser = (CustomUserDetails) SecurityContextHolder
         .getContext()
         .getAuthentication()
         .getPrincipal();
@@ -61,7 +65,9 @@ public class UserController {
         model.addAttribute("teams", teamRepository.findAll());
         if (bindingResult.hasErrors()) return "users/add_form";
         try {
-            userService.createAppUser(appUser);
+            CustomUserDetails loggedInUser = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Long userId = loggedInUser.getId();
+            userService.createAppUser(userId,appUser);
         }catch (RuntimeException e) {
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("teams", teamRepository.findAll());
