@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.elhajoui.sales.abstracts.UserService;
+import net.elhajoui.sales.dto.UpdateAppUerDto;
 import net.elhajoui.sales.entities.AppUser;
 import net.elhajoui.sales.entities.Team;
 import net.elhajoui.sales.repositories.TeamRepository;
@@ -38,7 +39,7 @@ public class UserServiceImp implements UserService {
     
 
     @Override
-    public Page<AppUser> AllUsers(Long userId,String keyword,int page, int size) {
+    public Page<AppUser> AllUsers(Long userId, String keyword,int page, int size) {
         AppUser loggedInUser = userRepository.findById(userId)
         .orElseThrow(() -> new RuntimeException("User not found"));
         
@@ -51,44 +52,51 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public AppUser createAppUser(AppUser appUser) {
-        AppUser new_appUser = new AppUser();
-        Team team= null;
-        
-        // Check if email already exists
-        if (userRepository.existsByMail(appUser.getMail())) {
+    public AppUser createAppUser(Long user_id,AppUser appUser) {
+            AppUser new_appUser = new AppUser();
+
+    // Check if email already exists
+    if (userRepository.existsByMail(appUser.getMail())) {
         throw new RuntimeException("Email '" + appUser.getMail() + "' is already in use");
-        }
+    }
 
-       // Check if team exists
+    // Get the logged-in user 
+    AppUser loggedInUser = userRepository.findById(user_id)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+
+    // Resolve the target team based on who is logged in
+    Team team;
+    if ("ADMIN".equalsIgnoreCase(loggedInUser.getRole())) {
+        // Admin picks a team from the form — validate it
         team = teamRepository.findById(appUser.getTeam().getId())
-        .orElseThrow(() -> new RuntimeException(
-            "Team with id " + appUser.getTeam().getId() + " not found"
-        ));
+            .orElseThrow(() -> new RuntimeException(
+                "Team with id " + appUser.getTeam().getId() + " not found"));
+    } else {
+        // Manager: team is assigned automatically — ignore form input
+        team = loggedInUser.getTeam();
+    }
 
-       // Check if the new user is a manager and ensure the team has no manager yet
-        if ("MANAGER".equalsIgnoreCase(appUser.getRole())) {
-            boolean managerExists = userRepository
+    // check manager uniqueness against the resolved team
+    if ("MANAGER".equalsIgnoreCase(appUser.getRole())) {
+        boolean managerExists = userRepository
             .findByTeamIdAndRole(team.getId(), "MANAGER")
             .isPresent();
-            if (managerExists) {
+        if (managerExists) {
             throw new RuntimeException(
                 "Team '" + team.getName() + "' already has a manager. " +
-                "A team can only have one manager."
-            );
-            }
+                "A team can only have one manager.");
         }
-       
-        new_appUser.setUsername(appUser.getUsername());
-        new_appUser.setMail(appUser.getMail());
-        new_appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-        new_appUser.setRole(appUser.getRole());
-        new_appUser.setStatus(appUser.getStatus());
-        new_appUser.setTeam(team);
-        
-        userRepository.save(new_appUser);
-        
-        return new_appUser;
+    }
+
+    new_appUser.setTeam(team);
+    new_appUser.setUsername(appUser.getUsername());
+    new_appUser.setMail(appUser.getMail());
+    new_appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
+    new_appUser.setRole(appUser.getRole());
+    new_appUser.setStatus(appUser.getStatus());
+
+    userRepository.save(new_appUser);
+    return new_appUser;
    }
 
     @Override
@@ -104,7 +112,7 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public AppUser updateAppUser(Long appUser_id, AppUser appUser) {
+    public AppUser updateAppUser(Long appUser_id, UpdateAppUerDto appUser) {
         Team team = null;
                 
         AppUser edit_user= userRepository.findById(appUser_id).orElseThrow(
@@ -125,7 +133,7 @@ public class UserServiceImp implements UserService {
         ));
 
        // Check if the updated role is manager and ensure no OTHER user in this team is already manager
-        if ("MANAGER".equalsIgnoreCase(updateAppUerDto.getRole())) {
+        if ("MANAGER".equalsIgnoreCase(appUser.getRole())) {
             boolean anotherManagerExists = userRepository
             .existsByTeamIdAndRoleAndIdNot(team.getId(), "MANAGER", appUser_id);
             if (anotherManagerExists) {
