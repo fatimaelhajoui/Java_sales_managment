@@ -20,6 +20,5 @@ public interface TeamService {
     Team editTeam(Long team_id);
     Team updateTeam(Long team_id,Team team);
     void deleteTeam(Long team_id);
-    
 }
 
