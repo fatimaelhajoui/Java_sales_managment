@@ -7,7 +7,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
       layout:decorate="~{main/layout}">
     <head>
-        <title>Sales List</title>
+        <title>My Sales List</title>
         <th:block layout:fragment="head">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -345,7 +345,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             
         <!-- Search Bar -->
         <div class="search-container mb-4">
-            <form method="get" th:action="@{/my_sales}" class="row g-2 align-items-center">
+            <form method="get" th:action="@{/agent/my_sales}" class="row g-2 align-items-center">
                 <div class="col-md-6 col-lg-4">
                     <div class="input-group">
                         <span class="input-group-text bg-white border-end-0">
@@ -357,7 +357,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     </div>
                 </div>
                 <div class="col-auto">
-                        <a th:href="@{/my_sales}" class="btn btn-outline-secondary">Clear</a>
+                        <a th:href="@{/agent/my_sales}" class="btn btn-outline-secondary">Clear</a>
                 </div>
             </form>
        </div>
@@ -384,7 +384,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     th:text="${s.status}">
                             </span>
                         </td>
-                        <td th:text="${s.uploadedAt}"></td>
+                        <td th:text="${#temporals.format(s.uploadedAt, 'dd MMM yyyy HH:mm')}"></td>
                         <td>
                             <div class="actions">
                                 <a class="action-btn info-btn" th:href="@{/agent/my_sale(saleId=${s.id})}" title="view">
@@ -401,7 +401,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
   <!-- Previous button -->
   <a class="page-btn"
      th:classappend="${currentPage == 0} ? 'disabled'"
-     th:href="@{/my_sales(page=${currentPage - 1}, size=5)}">
+     th:href="@{/agent/my_sales(page=${currentPage - 1}, size=5)}">
     <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
   </a>
 
@@ -409,7 +409,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
   <th:block th:each="page, status : ${totalPages}">
     <a class="page-btn"
        th:classappend="${status.index == currentPage} ? 'active'"
-       th:href="@{/my_sales(page=${status.index}, size=5)}"
+       th:href="@{/agent/my_sales(page=${status.index}, size=5)}"
        th:text="${status.index + 1}">
     </a>
   </th:block>
@@ -417,7 +417,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
   <!-- Next button -->
   <a class="page-btn"
      th:classappend="${currentPage == totalPages.length - 1} ? 'disabled'"
-     th:href="@{/my_sales(page=${currentPage + 1}, size=5)}">
+     th:href="@{/agent/my_sales(page=${currentPage + 1}, size=5)}">
     <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
   </a>
 
