@@ -1,0 +1,1118 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* ============================================================
+   shared.css — Common styles for all pages
+   Includes: reset, table pages, form pages, card pages,
+             pagination, search bar, status badges, modals,
+             action buttons, alerts, password fields
+   ============================================================ */
+
+/* ── Reset ── */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ── Body (for standalone pages like login) ── */
+body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+}
+
+/* ══════════════════════════════════════════════════
+   TABLE LIST PAGES  (teams, users, sales/agent, sales/manager)
+   ══════════════════════════════════════════════════ */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 32px;
+    font-weight: 600;
+    color: #000;
+}
+
+/* Primary action button (Add Team / Add User / Add Sale) */
+.add-user-btn {
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.add-user-btn:hover {
+    background-color: #0052a3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+    text-decoration: none;
+}
+
+.add-user-btn:active {
+    transform: translateY(0);
+    text-decoration: none;
+}
+
+/* Table wrapper */
+.table-wrapper {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+th {
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #000;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+tbody tr {
+    border-bottom: 1px solid #e8e8e8;
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+td {
+    padding: 16px;
+    color: #000;
+    font-size: 14px;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 16px;
+}
+
+/* ── Row action buttons (edit / delete / view) ── */
+.actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.action-btn {
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.action-btn:hover {
+    background-color: #0052a3;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
+}
+
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+.delete-btn {
+    background-color: #d32f2f;
+}
+
+.delete-btn:hover {
+    background-color: #b71c1c;
+    box-shadow: 0 4px 8px rgba(211, 47, 47, 0.3);
+}
+
+.info-btn {
+    background-color: #497fba;
+}
+
+.info-btn:hover {
+    background-color: #6394c9;
+    box-shadow: 0 4px 8px rgba(73, 127, 186, 0.3);
+}
+
+/* ══════════════════════════════════════════════════
+   PAGINATION
+   ══════════════════════════════════════════════════ */
+
+.pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 24px 0 8px;
+}
+
+.page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1.5px solid #e2e8f0;
+    background: #ffffff;
+    color: #475569;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.18s ease;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+}
+
+.page-btn:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+    color: #1e293b;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.page-btn.active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    transform: translateY(-1px);
+}
+
+.page-btn.active:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+.page-btn.disabled {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.page-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.page-info {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 0 4px;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+}
+
+/* ══════════════════════════════════════════════════
+   SEARCH BAR
+   ══════════════════════════════════════════════════ */
+
+.search-container .form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+}
+
+.search-container .input-group-text {
+    border-right: none;
+}
+
+/* ══════════════════════════════════════════════════
+   STATUS BADGES  (teams / users / sales)
+   ══════════════════════════════════════════════════ */
+
+/* Generic badge used on teams pages */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-active   { background-color: #d4f4dd; color: #0d6f3c; }
+.status-inactive { background-color: #fce4e6; color: #b71c1c; }
+
+/* Sale status badges */
+.status-pending  { background-color: #fff8e1; color: #f57f17; }
+.status-pending::before  { content: '●'; font-size: 10px; }
+
+.status-approved { background-color: #d4f4dd; color: #0d6f3c; }
+.status-approved::before { content: '●'; font-size: 10px; }
+
+.status-rejected { background-color: #fce4e6; color: #b71c1c; }
+.status-rejected::before { content: '●'; font-size: 10px; }
+
+/* User role badges */
+.badge-role {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.badge-manager { background-color: #eff6ff; color: #2563eb; border: 1.5px solid #bfdbfe; }
+.badge-agent   { background-color: #f5f3ff; color: #7c3aed; border: 1.5px solid #ddd6fe; }
+
+/* User status badges */
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.badge-active   { background-color: #f0fdf4; color: #16a34a; border: 1.5px solid #bbf7d0; }
+.badge-inactive { background-color: #fef2f2; color: #dc2626; border: 1.5px solid #fecaca; }
+
+.badge-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════
+   DELETE MODAL  (teams & users)
+   ══════════════════════════════════════════════════ */
+
+.delete-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-modal-box {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.delete-modal-icon {
+    width: 60px; height: 60px;
+    background: #fce4e6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.delete-modal-icon i {
+    color: #d32f2f;
+    font-size: 24px;
+}
+
+.delete-modal-box h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.delete-modal-message {
+    color: #666;
+    margin-bottom: 32px;
+    font-size: 15px;
+}
+
+.delete-modal-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.delete-modal-cancel {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #f0f0f0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.delete-modal-confirm {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #d32f2f;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* ══════════════════════════════════════════════════
+   FORM PAGES  (teams/add_form, teams/edit_form,
+                users/add_form, users/edit_form)
+   ══════════════════════════════════════════════════ */
+
+.form-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 64px);
+    padding: 32px 20px;
+}
+
+.form-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07), 0 1px 4px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    max-width: 680px;
+    padding: 48px;
+    animation: slideUp 0.4s ease-out;
+}
+
+/* Narrower variant used in teams forms */
+.form-container.narrow {
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.form-header {
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.form-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 4px;
+    letter-spacing: -0.3px;
+}
+
+.form-header p {
+    font-size: 14px;
+    color: #888;
+}
+
+/* Two-column grid used in user forms */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 24px;
+}
+
+/* Zero bottom margin variant for grid children */
+.form-grid .form-group {
+    margin-bottom: 0;
+}
+
+.form-group label,
+.form-group label.field-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+}
+
+/* Inputs & selects */
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px 13px;
+    font-size: 14px;
+    font-family: inherit;
+    border: 1.5px solid #e4e4e7;
+    border-radius: 8px;
+    background: #fafafa;
+    color: #111;
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+}
+
+/* Teams forms use a slightly different border color */
+.form-group input.border-light,
+.form-group textarea.border-light {
+    border: 1px solid #e0e0e0;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #2563eb;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+    padding: 10px 13px;
+}
+
+/* Disabled input */
+.form-group input:disabled {
+    background: #f4f4f5;
+    color: #aaa;
+    cursor: not-allowed;
+    border-color: #e4e4e7;
+}
+
+/* Custom select arrow */
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+.select-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #888;
+    pointer-events: none;
+}
+
+/* Error text */
+.text-danger {
+    color: #dc2626;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.error-text {
+    color: #d32f2f;
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+}
+
+.error-text.show { display: block; }
+
+/* Error banner at top of form */
+.error-banner {
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    background: #fef2f2;
+    border: 1.5px solid #fca5a5;
+    border-radius: 8px;
+    color: #dc2626;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Form action buttons row */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.form-actions button,
+button.btn-primary,
+button.btn-secondary {
+    flex: 1;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.btn-primary { background: #2563eb; color: white; }
+.btn-primary:hover { background: #1d4ed8; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3); }
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-secondary {
+    background: white;
+    color: #444;
+    border: 1.5px solid #e4e4e7 !important;
+    font-weight: 500;
+}
+
+.btn-secondary:hover { background: #f4f4f5; }
+
+/* ══════════════════════════════════════════════════
+   RADIO BUTTONS  (status field in user forms)
+   ══════════════════════════════════════════════════ */
+
+.radio-group {
+    display: flex;
+    gap: 10px;
+}
+
+.radio-option {
+    flex: 1;
+    position: relative;
+}
+
+.radio-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.radio-option label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 10px 14px;
+    border: 1.5px solid #e4e4e7;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    background: #fafafa;
+    transition: all 0.18s ease;
+    user-select: none;
+}
+
+.radio-option label::before {
+    content: '';
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #d1d5db;
+    background: white;
+    flex-shrink: 0;
+    transition: all 0.18s ease;
+}
+
+/* Active (green) variant */
+.radio-option.is-active input[type="radio"]:checked + label {
+    border-color: #16a34a;
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+.radio-option.is-active input[type="radio"]:checked + label::before {
+    border-color: #16a34a;
+    background: #16a34a;
+    box-shadow: inset 0 0 0 3px white;
+}
+
+.radio-option.is-active label:hover {
+    border-color: #16a34a;
+    color: #16a34a;
+}
+
+/* Default checked (blue) */
+.radio-option input[type="radio"]:checked + label {
+    border-color: #2563eb;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.radio-option input[type="radio"]:checked + label::before {
+    border-color: #2563eb;
+    background: #2563eb;
+    box-shadow: inset 0 0 0 3px white;
+}
+
+.radio-option label:hover {
+    border-color: #94a3b8;
+    color: #444;
+}
+
+/* ══════════════════════════════════════════════════
+   PASSWORD FIELDS  (add_form / edit_form users)
+   ══════════════════════════════════════════════════ */
+
+/* Input + eye button wrapper */
+.input-eye-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-eye-wrapper input {
+    padding-right: 42px !important;
+}
+
+.eye-btn {
+    position: absolute;
+    right: 11px;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: color 0.15s;
+    flex: unset;
+    width: auto;
+}
+
+.eye-btn:hover { color: #555; }
+.eye-btn svg { width: 17px; height: 17px; display: block; }
+
+/* Strength bar */
+.strength-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.strength-bar-track {
+    height: 4px;
+    background: #e4e4e7;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.strength-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.3s ease, background 0.3s ease;
+}
+
+.strength-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #aaa;
+    transition: color 0.3s;
+}
+
+/* Match hint */
+.match-hint {
+    font-size: 12px;
+    font-weight: 500;
+    min-height: 16px;
+}
+
+.match-hint.ok   { color: #16a34a; }
+.match-hint.fail { color: #dc2626; }
+
+/* Password change section (edit_form only) */
+.password-section {
+    grid-column: 1 / -1;
+    background: #f8fafc;
+    border: 1.5px solid #e4e4e7;
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.2s;
+}
+
+.password-section.is-open {
+    border-color: #2563eb;
+    background: #fafcff;
+}
+
+.password-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.password-toggle-row .label-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.password-toggle-row .label-group strong { font-size: 13px; font-weight: 600; color: #333; }
+.password-toggle-row .label-group span  { font-size: 12px; color: #999; }
+
+/* Toggle switch */
+.toggle-switch {
+    position: relative;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.toggle-track {
+    position: absolute;
+    inset: 0;
+    background: #d1d5db;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.toggle-track::after {
+    content: '';
+    position: absolute;
+    left: 3px; top: 3px;
+    width: 18px; height: 18px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.toggle-switch input:checked + .toggle-track { background: #2563eb; }
+.toggle-switch input:checked + .toggle-track::after { transform: translateX(18px); }
+
+/* Animated password fields */
+.password-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    margin-top: 0;
+    transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.3s ease;
+}
+
+.password-fields.visible {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 18px;
+}
+
+/* ══════════════════════════════════════════════════
+   CARD PAGES  (sales/agent/add_form, my_sale, agent_sale)
+   ══════════════════════════════════════════════════ */
+
+.upload-card {
+    background: var(--white, #fff);
+    border: 1.5px solid var(--border, #e4e4e7);
+    border-radius: 14px;
+    padding: 36px 40px;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.card-title    { font-size: 20px; font-weight: 600; color: var(--text, #111); margin-bottom: 4px; }
+.card-subtitle { font-size: 13.5px; color: var(--muted, #888); margin-bottom: 28px; }
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.form-group.full-col { grid-column: 1 / -1; }
+
+.form-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text, #111);
+}
+
+.form-label .req { color: var(--danger, #dc2626); margin-left: 2px; }
+
+/* Compact input used in card pages */
+.form-control {
+    height: 40px;
+    padding: 0 12px;
+    border: 1.5px solid var(--border, #e4e4e7);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text, #111);
+    background: var(--white, #fff);
+    outline: none;
+    width: 100%;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.form-control:focus {
+    border-color: var(--blue, #2563eb);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+}
+
+.form-control::placeholder { color: #aaa; }
+
+.form-textarea {
+    padding: 10px 12px;
+    border: 1.5px solid var(--border, #e4e4e7);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text, #111);
+    background: var(--white, #fff);
+    outline: none;
+    resize: vertical;
+    min-height: 90px;
+    width: 100%;
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.form-textarea:focus {
+    border-color: var(--blue, #2563eb);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+}
+
+.field-error {
+    font-size: 12px;
+    color: var(--danger, #dc2626);
+    margin-top: 2px;
+}
+
+/* Drop zone */
+.drop-zone {
+    border: 2px dashed var(--border, #e4e4e7);
+    border-radius: 10px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: border-color .2s, background .2s;
+}
+
+.drop-zone:hover,
+.drop-zone.over {
+    border-color: var(--blue, #2563eb);
+    background: var(--blue-light, #eff6ff);
+}
+
+.drop-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.drop-icon {
+    width: 42px; height: 42px;
+    background: var(--blue-light, #eff6ff);
+    border-radius: 10px;
+    display: grid; place-items: center;
+    margin: 0 auto 10px;
+    color: var(--blue, #2563eb);
+}
+
+.drop-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+.drop-hint  { font-size: 12px; color: var(--muted, #888); }
+.drop-hint span { color: var(--blue, #2563eb); font-weight: 500; }
+
+/* File preview row */
+.file-preview {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    background: #f9fafb;
+    border: 1.5px solid var(--border, #e4e4e7);
+    border-radius: 8px;
+    padding: 11px 14px;
+    margin-top: 10px;
+}
+
+.file-preview.show { display: flex; }
+
+.fp-icon {
+    width: 34px; height: 34px;
+    background: var(--blue-light, #eff6ff);
+    border-radius: 7px;
+    display: grid; place-items: center;
+    color: var(--blue, #2563eb);
+    flex-shrink: 0;
+}
+
+.fp-name { font-size: 13px; font-weight: 500; }
+.fp-size { font-size: 12px; color: var(--muted, #888); }
+
+.fp-remove {
+    margin-left: auto;
+    background: none; border: none;
+    color: var(--muted, #888); cursor: pointer;
+    padding: 4px; border-radius: 6px;
+    display: grid; place-items: center;
+    transition: background .15s, color .15s;
+}
+
+.fp-remove:hover { background: #fee2e2; color: var(--danger, #dc2626); }
+
+/* Divider */
+.divider { border: none; border-top: 1.5px solid var(--border, #e4e4e7); margin: 24px 0; }
+
+/* Alert banners (card pages) */
+.alert {
+    padding: 11px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    display: none;
+}
+
+.alert.show    { display: block; }
+.alert-error   { background: #fef2f2; color: #b91c1c; border: 1.5px solid #fecaca; }
+.alert-success { background: #f0fdf4; color: #15803d; border: 1.5px solid #bbf7d0; }
+
+/* Card page button row */
+.btn-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.btn {
+    height: 40px;
+    padding: 0 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: background .15s, box-shadow .15s;
+}
+
+.btn-cancel {
+    background: var(--white, #fff);
+    border: 1.5px solid var(--border, #e4e4e7) !important;
+    color: var(--text, #111);
+}
+
+.btn-cancel:hover { background: var(--bg, #f0f2f5); }
+
+/* ── Shared btn-primary for card pages (uses CSS vars from layout) ── */
+.btn.btn-primary {
+    background: var(--blue, #2563eb);
+    color: #fff;
+    min-width: 130px;
+    justify-content: center;
+    flex: unset;
+}
+
+.btn.btn-primary:hover {
+    background: var(--blue-dark, #1d4ed8);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, .28);
+}
+
+/* ══════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+    }
+
+    .table-wrapper { overflow-x: auto; }
+
+    th, td {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .header h1 { font-size: 24px; }
+}
+
+@media (max-width: 600px) {
+    .upload-card { padding: 24px 18px; }
+    .form-row    { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 520px) {
+    .form-container { padding: 28px 20px; }
+    .form-grid      { grid-template-columns: 1fr; }
+    .password-fields { grid-template-columns: 1fr; }
+}
