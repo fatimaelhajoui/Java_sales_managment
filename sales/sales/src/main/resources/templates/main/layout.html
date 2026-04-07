@@ -452,16 +452,30 @@
 
         <div class="nav-section-label" style="margin-top:8px;">Management</div>
 
-        <a th:href="@{/users}"
+        <a th:href="@{/users}" th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN' 
+        or #authentication.authorities[0].authority == 'ROLE_MANAGER'}"
            class="nav-item" data-tooltip="Users">
             <span class="nav-icon"><i class="fas fa-users"></i></span>
             <span class="nav-label">Users</span>
         </a>
 
-        <a th:href="@{/teams}"
+        <a th:href="@{/teams}" th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN'}"
            class="nav-item" data-tooltip="Teams">
             <span class="nav-icon"><i class="fas fa-people-group"></i></span>
             <span class="nav-label">Teams</span>
+        </a>
+        
+        <a th:href="@{/agent/my_sales}"  th:if="${#authentication.authorities[0].authority == 'ROLE_AGENT'}"
+           class="nav-item" data-tooltip="My_Sales">
+            <span class="nav-icon"><i class="fa-solid fa-cube"></i></span>
+            <span class="nav-label">My Sales</span>
+        </a>
+        
+        <a th:href="@{/sales}"
+           class="nav-item" data-tooltip="Sales" th:if="${#authentication.authorities[0].authority == 'ROLE_ADMIN' 
+        or #authentication.authorities[0].authority == 'ROLE_MANAGER'}">
+            <span class="nav-icon"><i class="fa-solid fa-cubes"></i></span>
+            <span class="nav-label">Sales</span>
         </a>
 
     </div>
@@ -475,7 +489,10 @@
             </div>
             <div class="user-info">
                 <div class="user-name" th:text="${#authentication.name}">Username</div>
-                <div class="user-role" th:text="${#authentication.authorities[0] == 'MANAGER' ? 'Manager' : 'Agent'}">Role</div>
+                <div class="user-role" th:text="${#authentication.authorities[0].toString() == 'ROLE_ADMIN' ? 'Admin' : 
+               (#authentication.authorities[0].toString() == 'ROLE_MANAGER' ? 'Manager' : 'Agent')}">Role</div>
+
+
             </div>
         </div>
 
