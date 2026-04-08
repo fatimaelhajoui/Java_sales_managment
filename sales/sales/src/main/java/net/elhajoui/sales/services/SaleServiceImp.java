@@ -9,19 +9,23 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import net.elhajoui.sales.abstracts.SaleService;
+import net.elhajoui.sales.dto.SaleFilterRequestDto;
 import net.elhajoui.sales.entities.AppUser;
 import net.elhajoui.sales.entities.Sale;
 import net.elhajoui.sales.enums.SaleStatus;
 import net.elhajoui.sales.repositories.SaleRepository;
 import net.elhajoui.sales.repositories.UserRepository;
+import net.elhajoui.sales.specification.SaleSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -96,15 +100,27 @@ public class SaleServiceImp implements SaleService{
 
  
     @Override
-    public Page<Sale> getAllSales(Long user_id,String keyword,int page, int size) {
+    public Page<Sale> getAllSales(Long user_id, SaleFilterRequestDto filter) {
          AppUser loggedInUser = userRepository.findById(user_id)
         .orElseThrow(() -> new RuntimeException("User not found"));
          
+         Specification<Sale> spec = Specification
+            .where(SaleSpecification.hasStatus(filter.getStatus()))
+            .and(SaleSpecification.hasDate(filter.getStartDate(),filter.getEndDate()))
+            .and(SaleSpecification.hasKeyword(filter.getKeyword()));
+                 
+                 
          if(("ADMIN").equalsIgnoreCase(loggedInUser.getRole())){
-            return saleRepository.findByContractIdContaining(keyword, PageRequest.of(page, size));
-        }else{
-           return  saleRepository.findByAgent_Team_IdAndContractIdContaining(loggedInUser.getTeam().getId(),keyword, PageRequest.of(page, size));
+            
         }
+         else if ("MANAGER".equalsIgnoreCase(loggedInUser.getRole())) {
+            spec = spec.and(SaleSpecification.hasTeam(loggedInUser.getTeam().getId()));
+        }
+         else{
+           spec = spec.and(SaleSpecification.hasAgent(user_id));
+        }
+         
+         return saleRepository.findAll(spec,PageRequest.of(filter.getPage(), filter.getSize()));
          
     }
 
