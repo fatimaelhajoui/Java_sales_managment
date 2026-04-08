@@ -27,7 +27,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
+import net.elhajoui.sales.dto.SaleFilterRequestDto;
 import net.elhajoui.sales.enums.SaleStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 /**
  *
@@ -115,10 +119,7 @@ public class SaleController {
     
     //Manager & admin
     @GetMapping("/sales")
-    public String AllSales(Model model,
-                        @RequestParam(name= "keyword", defaultValue = "")String keyword, 
-                        @RequestParam(name= "page", defaultValue = "0")int page, 
-                        @RequestParam(name= "size", defaultValue = "5") int size){
+    public String AllSales(Model model,@ModelAttribute SaleFilterRequestDto filter){
         
         CustomUserDetails loggedInUser = (CustomUserDetails) SecurityContextHolder
         .getContext()
@@ -127,10 +128,14 @@ public class SaleController {
         
         Long userId = loggedInUser.getId();
     
-        model.addAttribute( "saleslist", saleServiceImp.getAllSales(userId,keyword, page, size).getContent() );
-        model.addAttribute( "totalPages", new int[saleServiceImp.getAllSales(userId,keyword, page, size).getTotalPages()] );
-        model.addAttribute("currentPage", page);
-        model.addAttribute("keyword", keyword);
+        Page<Sale> salesPage = saleServiceImp.getAllSales(loggedInUser.getId(), filter);
+
+        model.addAttribute("saleslist", salesPage.getContent());
+        model.addAttribute("totalPages", new int[salesPage.getTotalPages()]);
+        model.addAttribute("currentPage", filter.getPage());
+        model.addAttribute("keyword", filter.getKeyword());
+        model.addAttribute("filter", filter); // pass full filter for pagination links
+        
         return "sales/manager/sales";
     }
     
