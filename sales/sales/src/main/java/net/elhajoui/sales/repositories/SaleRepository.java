@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author marwa
  */
-public interface SaleRepository extends JpaRepository<Sale ,Long>{
+public interface SaleRepository extends JpaRepository<Sale ,Long>, JpaSpecificationExecutor<Sale>{
     //agent
     List<Sale> findByAgentUsername(String username);
     Page<Sale> findByAgent_IdAndContractIdContaining(Long user_id, String keyword, Pageable page); //list sales
