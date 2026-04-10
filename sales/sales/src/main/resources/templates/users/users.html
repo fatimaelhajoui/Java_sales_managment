@@ -298,8 +298,12 @@
                                 </div>
                             </td>
                         </tr>
+                        <!-- Empty state -->
                         <tr th:if="${#lists.isEmpty(userslist)}">
-                            <td colspan="5" class="empty-message">No users found.</td>
+                        <td colspan="5" class="text-center text-muted py-4">
+                            <i class="fa-solid fa-inbox fa-2x mb-2 d-block"></i>
+                            No user found.
+                        </td>
                         </tr>
                     </tbody>
                 </table>
