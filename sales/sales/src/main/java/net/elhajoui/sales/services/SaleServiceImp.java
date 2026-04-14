@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package net.elhajoui.sales.services;
 
 import jakarta.validation.Path;
@@ -30,10 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- *
- * @author marwa
- */
+
 @Service
 public class SaleServiceImp implements SaleService{
 
@@ -113,11 +106,8 @@ public class SaleServiceImp implements SaleService{
          if(("ADMIN").equalsIgnoreCase(loggedInUser.getRole())){
             
         }
-         else if ("MANAGER".equalsIgnoreCase(loggedInUser.getRole())) {
+         else  {
             spec = spec.and(SaleSpecification.hasTeam(loggedInUser.getTeam().getId()));
-        }
-         else{
-           spec = spec.and(SaleSpecification.hasAgent(user_id));
         }
          
          return saleRepository.findAll(spec,PageRequest.of(filter.getPage(), filter.getSize()));
@@ -159,9 +149,24 @@ public class SaleServiceImp implements SaleService{
     }
 
     @Override
-    public Page<Sale> getSalesByAgent(Long userId, String keyword,int page, int size) {
+    public Page<Sale> getSalesByAgent(Long userId,  SaleFilterRequestDto filter) {
         
-        return saleRepository.findByAgent_IdAndContractIdContaining(userId, keyword, PageRequest.of(page, size));
+        AppUser loggedInUser = userRepository.findById(userId)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+         
+         Specification<Sale> spec = Specification
+            .where(SaleSpecification.hasStatus(filter.getStatus()))
+            .and(SaleSpecification.hasDate(filter.getStartDate(),filter.getEndDate()))
+            .and(SaleSpecification.hasKeyword(filter.getKeyword()));
+                 
+                 
+         if(("AGENT").equalsIgnoreCase(loggedInUser.getRole())){
+            spec = spec.and(SaleSpecification.hasAgent(loggedInUser.getId()));
+        }
+         
+         return saleRepository.findAll(spec,PageRequest.of(filter.getPage(), filter.getSize()));
+         
+        
     }
 
     @Override
