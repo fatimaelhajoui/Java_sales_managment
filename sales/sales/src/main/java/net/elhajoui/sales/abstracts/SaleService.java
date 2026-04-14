@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package net.elhajoui.sales.abstracts;
 
 import net.elhajoui.sales.entities.Sale;
@@ -12,14 +9,11 @@ import java.io.IOException;
 import java.util.List;
 import net.elhajoui.sales.enums.SaleStatus;
 import org.springframework.data.domain.Page;
-/**
- *
- * @author marwa
- */
+
 public interface SaleService {
     
     //manager & admin
-    Page<Sale> getAllSales(Long user_id,String keyword,int page, int size);
+    Page<Sale> getAllSales(Long user_id,SaleFilterRequestDto filter);
 
     Sale updateStatus(Long user_id,Long id, SaleStatus status);
     
@@ -28,9 +22,7 @@ public interface SaleService {
     //agent
     Sale uploadSale(MultipartFile file, String contractId, String note, String username) throws IOException;
     
-    Page<Sale> getSalesByAgent(Long userId, String keyword,int page, int size);
+    Page<Sale> getSalesByAgent(Long userId,  SaleFilterRequestDto filter);
     
     Sale getSaleByIdAndAgent(Long user_id, Long id);
-
-    
 }
