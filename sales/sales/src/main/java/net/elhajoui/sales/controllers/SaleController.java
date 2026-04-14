@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package net.elhajoui.sales.controllers;
 
 import jakarta.validation.Valid;
@@ -33,10 +29,6 @@ import net.elhajoui.sales.enums.SaleStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-/**
- *
- * @author marwa
- */
 @Controller
 public class SaleController {
     @Autowired
@@ -45,10 +37,7 @@ public class SaleController {
     //Agent
     
     @GetMapping("/agent/my_sales")
-    public String sales(Model model,
-                        @RequestParam(name= "keyword", defaultValue = "")String keyword, 
-                        @RequestParam(name= "page", defaultValue = "0")int page, 
-                        @RequestParam(name= "size", defaultValue = "5") int size){
+    public String sales(Model model,@ModelAttribute SaleFilterRequestDto filter){
         
         CustomUserDetails loggedInUser = (CustomUserDetails) SecurityContextHolder
         .getContext()
@@ -57,15 +46,18 @@ public class SaleController {
         
         Long userId = loggedInUser.getId();
     
-        model.addAttribute( "saleslist", saleServiceImp.getSalesByAgent(userId,keyword, page, size).getContent() );
-        model.addAttribute( "totalPages", new int[saleServiceImp.getSalesByAgent(userId,keyword, page, size).getTotalPages()] );
-        model.addAttribute("currentPage", page);
-        model.addAttribute("keyword", keyword);
+        Page<Sale> salesPage = saleServiceImp.getSalesByAgent(userId,filter);
+        
+        model.addAttribute( "saleslist", salesPage.getContent() );
+        model.addAttribute( "totalPages", new int[salesPage.getTotalPages()] );
+        model.addAttribute("currentPage", filter.getPage());
+        model.addAttribute("keyword", filter.getKeyword());
+        model.addAttribute("filter", filter);
         return "sales/agent/sales";
     }
     
     @GetMapping("/agent/add_sale")
-    public String teamAdd(Model model){
+    public String SaleAdd(Model model){
         model.addAttribute("sale", new Sale()); 
         return "sales/agent/add_form";
     }
