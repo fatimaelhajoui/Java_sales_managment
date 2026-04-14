@@ -1,18 +1,17 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package net.elhajoui.sales.controllers;
 
 import jakarta.validation.Valid;
 import java.util.List;
 import net.elhajoui.sales.abstracts.UserService;
 import net.elhajoui.sales.dto.UpdateAppUerDto;
+import net.elhajoui.sales.dto.UserFilterRequestDto;
 import net.elhajoui.sales.entities.AppUser;
 import net.elhajoui.sales.repositories.TeamRepository;
 import net.elhajoui.sales.repositories.UserRepository;
 import net.elhajoui.sales.services.CustomUserDetails;
+import net.elhajoui.sales.specification.UserSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/**
- *
- * @author marwa
- */
+
 @Controller
 public class UserController {
     @Autowired
@@ -34,10 +30,7 @@ public class UserController {
     private TeamRepository teamRepository;
     
     @GetMapping("/users")
-    public String index(Model model,
-                        @RequestParam(name= "keyword", defaultValue = "")String keyword, 
-                        @RequestParam(name= "page", defaultValue = "0")int page, 
-                        @RequestParam(name= "size", defaultValue = "5") int size){
+    public String index(Model model,UserFilterRequestDto filter){
         
         CustomUserDetails loggedInUser = (CustomUserDetails) SecurityContextHolder
         .getContext()
@@ -45,11 +38,14 @@ public class UserController {
         .getPrincipal();
         
         Long userId = loggedInUser.getId();
+        
+        Page<AppUser>  userPage = userService.AllUsers(userId, filter);
     
-        model.addAttribute( "userslist", userService.AllUsers(userId,keyword, page, size).getContent() );
-        model.addAttribute( "totalPages", new int[userService.AllUsers(userId,keyword, page, size).getTotalPages()] );
-        model.addAttribute("currentPage", page);
-        model.addAttribute("keyword", keyword);
+        model.addAttribute( "userslist", userPage.getContent() );
+        model.addAttribute( "totalPages", new int[userPage.getTotalPages()] );
+        model.addAttribute("currentPage", filter.getPage());
+        model.addAttribute("keyword", filter.getKeyword());
+        model.addAttribute("filter", filter);
         return "users/users";
     }
     
