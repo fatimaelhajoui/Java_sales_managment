@@ -1,176 +1,148 @@
-# 📞 Call Center Sales Management System
+# 📊 Sales Management System
 
-A Spring Boot web application for call center team leaders to manage sales agents and track their performance with statistics.
+A Spring Boot web application for managing call center sales teams — built with role-based access control, file uploads, and real-time filtering.
 
 ---
 
-## 🛠️ Technology Stack
+## 🔐 Roles & Access
 
-| Layer | Technology |
+| Role | What they can do |
 |---|---|
-| Backend | Spring Boot 3.x |
-| Database | H2 (dev) / MySQL / PostgreSQL (prod) |
-| ORM | Spring Data JPA |
-| Template Engine | Thymeleaf |
-| Frontend | HTML5, CSS3, Bootstrap 5, JavaScript |
-| Security | Spring Security |
-| Build Tool | Maven |
+| **Admin** | Manage all teams, users, and sales across the entire system |
+| **Manager** | View and approve/reject sales within their own team |
+| **Agent** | Upload sales contracts (PDF) and view their own submission history |
 
 ---
 
 ## ✨ Features
 
-### Agent
-- Login / Logout
-- View own online/offline status
-- Upload a sale (Contract ID + PDF file)
-- View own sales history
+- **Authentication** — Form-based login with BCrypt password hashing and session management
+- **Role-based security** — URL-level access control via Spring Security
+- **Sales submission** — Agents upload PDF contracts with a Contract ID; files are stored with UUID-prefixed names to prevent conflicts
+- **Sales approval workflow** — Managers and Admins can approve or reject submitted sales
+- **Advanced filtering** — Filter sales by status, date range, and keyword using JPA Specification pattern
+- **User management** — Create, edit, deactivate users; one manager per team enforced at service level
+- **Team management** — Full CRUD for teams (Admin only)
+- **Pagination** — All list views are paginated with keyword search
+- **Inactive user blocking** — Deactivated accounts cannot log in
 
-### Manager
-- Login / Logout
-- View all agents and their online/offline status
-- View all sales
-- Filter sales by agent or team
-- Edit / Delete sales
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Backend | Java 21, Spring Boot 4.x |
+| Security | Spring Security (form login, BCrypt) |
+| ORM | Spring Data JPA + Hibernate |
+| Database | MySQL |
+| Template Engine | Thymeleaf + Thymeleaf Layout Dialect |
+| Frontend | HTML5, CSS3, Bootstrap 5 |
+| Build Tool | Maven |
 
 ---
 
 ## 🗄️ Database Schema
 
-### TEAMS
-| Field | Description |
-|---|---|
-| `id` | Primary key |
-| `name` | Team name (unique) |
-| `note` | Team note |
-
-### USERS
-| Field | Description |
-|---|---|
-| `id` | Primary key |
-| `username` | Username |
-| `password` | Hashed password |
-| `email` | Email address |
-| `role` | `Agent` or `Manager` |
-| `team_name` | FK → Teams |
-| `status` | `Active` or `Inactive` |
-
-### SALES
-| Field | Description |
-|---|---|
-| `id` | Primary key |
-| `agent_id` | FK → Users |
-| `contract_id` | Contract identifier |
-| `contract_file` | PDF file path |
-| `sale_status` | `Completed` or `Cancelled` |
-| `created_at` | Timestamp |
-
-### Relationships
-
 ```
-Team (1) ──────── (*) User (1) ──────── (*) Sales
+Team (1) ──────── (N) AppUser (1) ──────── (N) Sale
 ```
 
----
+**Team** — `id`, `name`, `note`
 
-## 🔌 API Endpoints
+**AppUser** — `id`, `username`, `password` (hashed), `email`, `role` (ADMIN / MANAGER / AGENT), `status` (active/inactive), `team_id` (FK)
 
-### Authentication
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/login` | User login |
-| POST | `/logout` | User logout |
-
-### Teams
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/teams` | List all teams |
-| GET | `/teams/{id}` | View team details |
-| GET | `/teams/new` | Create team form |
-| POST | `/teams` | Save new team |
-| GET | `/teams/{id}/edit` | Edit team form |
-| PUT | `/teams/{id}` | Update team |
-| DELETE | `/teams/{id}` | Delete team |
-
-### Agents
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/agents` | List all agents |
-| GET | `/agents/{id}` | View agent details |
-| GET | `/agents/new` | Create agent form |
-| POST | `/agents` | Save new agent |
-| GET | `/agents/{id}/edit` | Edit agent form |
-| PUT | `/agents/{id}` | Update agent |
-| DELETE | `/agents/{id}` | Delete agent |
-| GET | `/agents/team/{teamId}` | List agents by team |
-
-### Sales
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/sales` | List all sales |
-| GET | `/sales/{id}` | View sale details |
-| GET | `/sales/new` | Create sale form |
-| POST | `/sales` | Save new sale |
-| GET | `/sales/{id}/edit` | Edit sale form |
-| PUT | `/sales/{id}` | Update sale |
-| DELETE | `/sales/{id}` | Delete sale |
-| GET | `/sales/agent/{agentId}` | List sales by agent |
-| GET | `/sales/filter` | Filter sales by criteria |
-
-### Dashboard & Statistics
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/dashboard` | Main dashboard |
-| GET | `/statistics/agent/{id}` | Agent statistics |
-| GET | `/statistics/team/{id}` | Team statistics |
-| GET | `/statistics/report` | Generate reports |
-
----
-
-## 🧭 Controller Overview
-
-### `AuthController`
-Handles `/login` and `/logout`.
-
-### `ManagerController`
-Handles manager-scoped routes:
-- `GET /manager/dashboard`
-- `GET /manager/sales` — view, filter, edit, delete sales
-- `GET /manager/agents` — view, create, edit, delete agents
-- `POST /manager/teams` — manage teams
-
-### `AgentController`
-Handles agent-scoped routes:
-- `GET /agent/dashboard`
-- `GET /agent/add-sale` — sale submission form
-- `POST /agent/save-sale` — submit a sale
-- `GET /agent/my-sales` — view personal sales
+**Sale** — `id`, `contract_id`, `original_file`, `stored_file`, `content_type`, `size`, `status` (PENDING / APPROVED / REJECTED), `uploaded_at`, `agent_id` (FK)
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Java 17+
-- Maven 3.8+
-- MySQL or PostgreSQL (for production)
 
-### Run locally (H2 dev mode)
+- Java 21+
+- Maven 3.8+
+- MySQL 8+
+
+### Run locally
+
 ```bash
-git clone https://github.com/fatimaelhajoui/sales_managment.git
-cd sales_managment
+git clone https://github.com/fatimaelhajoui/Java_sales_managment.git
+cd Java_sales_managment/sales/sales
 mvn spring-boot:run
 ```
-The app will be available at `http://localhost:8080`.
 
-### Production setup
-Update `src/main/resources/application.properties` with your database credentials:
+The app starts at **http://localhost:8085**
+
+### Database setup
+
+MySQL database is created automatically on first run (`createDatabaseIfNotExist=true`).
+
+Update credentials in `src/main/resources/application.properties` if needed:
+
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/callcenter
-spring.datasource.username=your_user
+spring.datasource.url=jdbc:mysql://localhost:3306/sales?createDatabaseIfNotExist=true
+spring.datasource.username=root
 spring.datasource.password=your_password
-spring.jpa.hibernate.ddl-auto=update
+```
+
+### Create your first admin account
+
+Insert a user directly into the database to get started (password is BCrypt hash of `admin1234`):
+
+```sql
+INSERT INTO team (name, note) VALUES ('Admin Team', 'Default team');
+
+INSERT INTO app_user (username, password, email, role, status, team_id)
+VALUES (
+  'admin',
+  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh9S',
+  'admin@example.com',
+  'ADMIN',
+  true,
+  1
+);
 ```
 
 ---
 
+## 📁 Project Structure
+
+```
+src/main/java/net/elhajoui/sales/
+├── config/          # Spring Security + password encoder config
+├── controllers/     # MVC controllers (Auth, Sale, Team, User)
+├── dto/             # Data Transfer Objects
+├── entities/        # JPA entities (AppUser, Sale, Team)
+├── enums/           # SaleStatus enum (PENDING, APPROVED, REJECTED)
+├── repositories/    # Spring Data JPA repositories
+├── services/        # Service interfaces + implementations
+└── specification/   # JPA Specification for dynamic sale filtering
+```
+
+---
+
+## 🔑 Key Design Decisions
+
+- **Service interfaces** (`SaleService`, `UserService`, `TeamService`) decouple the controller from the implementation, making the code testable and extensible
+- **JPA Specification pattern** enables composable, type-safe dynamic queries without writing JPQL strings
+- **CustomUserDetails** stores the user's database ID so controllers can identify the logged-in user without an extra DB call
+- **Role enforcement at service layer** — business rules like "one manager per team" are checked in the service, not just the UI
+- **UUID file naming** prevents filename collisions and avoids exposing original filenames in storage
+
+---
+
+## 📌 Roadmap
+
+- [ ] Unit and integration tests (JUnit 5 + Mockito)
+- [ ] Global exception handler with user-friendly error pages
+- [ ] Dashboard with sales statistics per team/agent
+- [ ] Docker + docker-compose for one-command setup
+- [ ] REST API endpoints alongside existing MVC views
+
+---
+
+## 👩‍💻 Author
+
+**Fatima El Hajoui**
+[GitHub](https://github.com/fatimaelhajoui) · [LinkedIn](#)
