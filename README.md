@@ -145,4 +145,4 @@ src/main/java/net/elhajoui/sales/
 ## 👩‍💻 Author
 
 **Fatima El Hajoui**
-[GitHub](https://github.com/fatimaelhajoui) · [LinkedIn](#)
+[GitHub](https://github.com/fatimaelhajoui) · [LinkedIn](www.linkedin.com/in/fatima-zahrae-el-hajoui)
