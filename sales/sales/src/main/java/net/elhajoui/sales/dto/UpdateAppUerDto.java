@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package net.elhajoui.sales.dto;
 
 import jakarta.persistence.Column;
@@ -18,10 +14,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.elhajoui.sales.entities.Team;
 
-/**
- *
- * @author marwa
- */
 @Getter @Setter
 public class UpdateAppUerDto {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
