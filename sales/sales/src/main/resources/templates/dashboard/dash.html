@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{main/layout}">
+    <head>
+        <title>Admin Dashboard</title>
+        <th:block layout:fragment="head">
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
+            <link rel="stylesheet" href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+            <link rel="stylesheet" th:href="@{/css/shared.css}">
+            <style>
+                .summary-card {
+                    border: none;
+                    border-radius: 12px;
+                    padding: 1.5rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 1.2rem;
+                    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+                    transition: transform 0.2s, box-shadow 0.2s;
+                }
+                .summary-card:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+                }
+                .summary-card .card-icon {
+                    width: 56px;
+                    height: 56px;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.5rem;
+                    flex-shrink: 0;
+                }
+                .summary-card .card-body {
+                    padding: 0;
+                }
+                .summary-card .card-label {
+                    font-size: 0.82rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.06em;
+                    margin-bottom: 0.2rem;
+                }
+                .summary-card .card-value {
+                    font-size: 2rem;
+                    font-weight: 700;
+                    line-height: 1;
+                }
+ 
+                /* Total */
+                .card-total { background-color: #f0f4ff; }
+                .card-total .card-icon { background-color: #dbe4ff; color: #3b5bdb; }
+                .card-total .card-label { color: #3b5bdb; }
+                .card-total .card-value { color: #1c3faa; }
+ 
+                /* Pending */
+                .card-pending { background-color: #fff9db; }
+                .card-pending .card-icon { background-color: #ffec99; color: #e67700; }
+                .card-pending .card-label { color: #e67700; }
+                .card-pending .card-value { color: #b35900; }
+ 
+                /* Approved */
+                .card-approved { background-color: #ebfbee; }
+                .card-approved .card-icon { background-color: #b2f2bb; color: #2f9e44; }
+                .card-approved .card-label { color: #2f9e44; }
+                .card-approved .card-value { color: #1a6b2b; }
+ 
+                /* Rejected */
+                .card-rejected { background-color: #fff5f5; }
+                .card-rejected .card-icon { background-color: #ffc9c9; color: #c92a2a; }
+                .card-rejected .card-label { color: #c92a2a; }
+                .card-rejected .card-value { color: #a61e1e; }
+            </style>
+        </th:block>
+    </head>
+    <body>
+        <th:block layout:fragment="page-title">Admin Dashboard</th:block>
+ 
+        <div layout:fragment="content">
+            <div class="container">
+ 
+                <div class="header">
+                    <h1>Dashboard Overview</h1>
+                </div>
+ 
+                <!-- ── Summary Cards ── -->
+                <div class="row g-4 mb-4">
+ 
+                    <!-- Total -->
+                    <div class="col-3">
+                        <div class="summary-card card-total">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-chart-bar"></i>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-label">Total Sales</div>
+                                <div class="card-value" th:text="${Summary.total}">0</div>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <!-- Pending -->
+                    <div class="col-3">
+                        <div class="summary-card card-pending">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-label">Pending</div>
+                                <div class="card-value" th:text="${Summary.pendding}">0</div>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <!-- Approved -->
+                    <div class="col-3">
+                        <div class="summary-card card-approved">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-label">Approved</div>
+                                <div class="card-value" th:text="${Summary.approved}">0</div>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <!-- Rejected -->
+                    <div class="col-3">
+                        <div class="summary-card card-rejected">
+                            <div class="card-icon">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-label">Rejected</div>
+                                <div class="card-value" th:text="${Summary.rejected}">0</div>
+                            </div>
+                        </div>
+                    </div>
+ 
+                </div>
+                <!-- /Summary Cards -->
+ 
+            </div><!-- /container -->
+        </div><!-- /content fragment -->
+ 
+        <th:block layout:fragment="scripts">
+            <script>
+                // Dashboard scripts here
+            </script>
+        </th:block>
+ 
+    </body>
+</html>
