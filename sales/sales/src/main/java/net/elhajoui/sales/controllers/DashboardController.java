@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package net.elhajoui.sales.controllers;
 
 import net.elhajoui.sales.dto.SaleSummaryDto;
@@ -14,10 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-/**
- *
- * @author marwa
- */
 
 @Controller 
 public class DashboardController {
@@ -28,7 +20,7 @@ public class DashboardController {
     @GetMapping("/dashboard")
     public String dashboard(Model model){
         
-        CustomUserDetails loggedInUser = (CustomUserDetails) SecurityContextHolder
+       CustomUserDetails loggedInUser = (CustomUserDetails) SecurityContextHolder
         .getContext()
         .getAuthentication()
         .getPrincipal();
@@ -37,8 +29,12 @@ public class DashboardController {
         
         SaleSummaryDto SaleSUM= dashboardServiceImp.getSalesSammury(userId);
         
+        List<TeamsClassmentDto> TopTeams = dashboardServiceImp.getTeamRankingCurrentMonth(userId);
+        
         model.addAttribute( "Summary", SaleSUM );
+        model.addAttribute("TopTeams", TopTeams);
         
         return "dashboard/dash";
+        
     }
 }
