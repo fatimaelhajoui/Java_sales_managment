@@ -12,5 +12,14 @@ public interface DashboardService {
     //teams sorted by sales count
    List<TeamsClassmentDto> getTeamRankingCurrentMonth(Long user_id);
     
+    //teams sorted by sales count
+    List<TeamsClassmentDto> getTeamRankingCurrentMonth(Long user_id);
+   
+   //agent sorted by sales count
+   List<AgentsClassmentDto> getAgentRankingCurrentMonth(Long user_id);
+   
+   //todays sales 
+   Page<Sale> getRecentSales(Long user_id, RecentSalesDto filter);
+    
     
 }
