@@ -22,5 +22,7 @@ public interface UserRepository extends JpaRepository<AppUser,Long>{
     boolean existsByMailAndIdNot(String mail, Long id); //Only block if ANOTHER user has that email in edit_form
     Optional<AppUser> findByTeamIdAndRole(Long teamId, String role); // Find existing manager in a team, optionally excluding a specific user (for update)
     boolean existsByTeamIdAndRoleAndIdNot(Long teamId, String role, Long excludeId); // For update — exclude the current user being edited
+    List<AppUser> findByTeamId(Long teamId);
+
 
 }
