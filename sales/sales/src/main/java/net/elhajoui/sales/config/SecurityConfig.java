@@ -18,14 +18,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-   
-    @Autowired
+   @Autowired
     private PasswordEncoder passwordEncoder;
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
-           .headers(headers -> headers
+            .headers(headers -> headers
                                 .frameOptions(frame -> frame.sameOrigin())
             )
             .cors(AbstractHttpConfigurer::disable)
@@ -35,13 +34,20 @@ public class SecurityConfig {
                 //for table Team    
                 .requestMatchers(HttpMethod.GET, "/teams/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/teams/**").hasRole("ADMIN")
+                     
                 //for table AppUser 
                 .requestMatchers(HttpMethod.GET, "/users/**").hasAnyRole("ADMIN", "MANAGER")
                 .requestMatchers(HttpMethod.POST, "/users/**").hasAnyRole("ADMIN", "MANAGER")
+                     
                 //for table Sale 
+                     //for agent 
                 .requestMatchers(HttpMethod.GET, "/agent/**").hasRole("AGENT")
                 .requestMatchers(HttpMethod.POST, "/agent/**").hasRole("AGENT")
                 .requestMatchers("/agent/sale/file/**").hasRole("AGENT")
+                    //for admin and manager
+                .requestMatchers(HttpMethod.GET, "/sales").hasAnyRole("ADMIN", "MANAGER")
+                .requestMatchers(HttpMethod.GET, "/agent_sale").hasAnyRole("ADMIN", "MANAGER")
+                .requestMatchers(HttpMethod.POST, "/sale_status/update").hasAnyRole("ADMIN", "MANAGER")
                 .anyRequest().authenticated();
                 
             })
@@ -60,7 +66,7 @@ public class SecurityConfig {
                 .maximumSessions(1)
                 .expiredUrl("/login?expired=true") // Handle expired sessions
              );
-
+             
             return http.build();
     }
 }
