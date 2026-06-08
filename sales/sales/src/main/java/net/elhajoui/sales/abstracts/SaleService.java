@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 public interface SaleService {
     
     //manager & admin
+
     Page<Sale> getAllSales(Long user_id,SaleFilterRequestDto filter);
 
     Sale updateStatus(Long user_id,Long id, SaleStatus status);
@@ -25,4 +26,5 @@ public interface SaleService {
     Page<Sale> getSalesByAgent(Long userId,  SaleFilterRequestDto filter);
     
     Sale getSaleByIdAndAgent(Long user_id, Long id);
+
 }
