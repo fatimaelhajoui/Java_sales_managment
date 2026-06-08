@@ -9,8 +9,9 @@ public interface DashboardService {
     //counts for total / approved / rejected / pending
     SaleSummaryDto getSalesSammury(Long user_id);
     
-    //teams sorted by sales count
-   List<TeamsClassmentDto> getTeamRankingCurrentMonth(Long user_id);
+    //current year sales staistics
+    List<Integer> getMonthlySalesCurrentYear(Long userId);
+
     
     //teams sorted by sales count
     List<TeamsClassmentDto> getTeamRankingCurrentMonth(Long user_id);
@@ -20,6 +21,11 @@ public interface DashboardService {
    
    //todays sales 
    Page<Sale> getRecentSales(Long user_id, RecentSalesDto filter);
+   
+   //export today sales as excel file
+   void exportRecentSalesToExcel(Long userId, RecentSalesDto filter, HttpServletResponse response) throws IOException;
+   
+   
     
     
 }
